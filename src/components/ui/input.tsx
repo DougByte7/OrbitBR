@@ -11,7 +11,7 @@ export interface InputProps
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, leftSection, rightSection, ...props }, ref) => {
     return (
-      <span
+      <label
         className={cn(
           "border-input/10 shadow-[0px_0px_48px_8px_rgba(0, 0, 0, 0.25)] ring-offset-background inline-flex w-full gap-3 rounded-md border bg-black/5 p-3 text-sm",
           "focus-within:ring-ring focus-within:ring-2 focus-within:ring-offset-2",
@@ -32,7 +32,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         {rightSection}
-      </span>
+      </label>
     );
   },
 );
