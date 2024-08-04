@@ -28,7 +28,7 @@ export default function Countdown() {
       <div>
         <span>Próximo anime em</span>
         <span
-          className="text-success inline-block w-12"
+          className="text-success inline-block w-14"
           suppressHydrationWarning
         >
           {countdown.getHours().toFixed().padStart(2, "0")}:
