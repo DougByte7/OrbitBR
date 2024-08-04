@@ -17,7 +17,7 @@ export default async function Home() {
 
   return (
     <HydrateClient>
-      <main className="flex flex-col items-center justify-center gap-10">
+      <main className="flex flex-col items-center justify-center gap-10 px-4">
         <TopBar />
 
         <Image
@@ -29,14 +29,15 @@ export default async function Home() {
         />
 
         <div className="grid gap-10">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <Input
-              className="w-72"
+              className="max-w-72"
               leftSection={<Search size={20} />}
               placeholder="Qual anime está buscando?"
             />
             <Button>
-              <WandSparkles size={20} /> Adivinhar
+              <WandSparkles size={20} />{" "}
+              <span className="hidden sm:inline">Adivinhar</span>
             </Button>
           </div>
           <div className="grid gap-3">

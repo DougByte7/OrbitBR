@@ -6,13 +6,14 @@ import { HandHeart } from "lucide-react";
 
 export default async function TopBar() {
   return (
-    <header className="bg-[rgba(19, 18, 20, 0.50)] border-border/5 sticky top-0 z-10 flex h-[4.375rem] w-full items-center justify-center border-b">
-      <div className="flex w-full max-w-[1320px] gap-12">
+    <header className="bg-[rgba(19, 18, 20, 0.50)] border-border/5 top-0 z-10 flex w-full items-center justify-center border-b py-4 sm:sticky sm:h-[4.375rem] sm:py-0">
+      <div className="flex w-full max-w-[1320px] flex-wrap justify-between gap-3 sm:gap-12">
         <Image src="/favicon.svg" alt="Orbit BR Logo" width={36} height={36} />
 
-        <div className="flex gap-4">
+        <div className="flex gap-3">
           <Button variant="outline">
-            <IconBrandDiscordFilled size={20} color="#C9C6DD" /> Discord
+            <IconBrandDiscordFilled size={20} color="#C9C6DD" />{" "}
+            <span className="hidden sm:inline-flex">Discord</span>
           </Button>
 
           <Button

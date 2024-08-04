@@ -21,7 +21,7 @@ export default function Countdown() {
 
   return (
     <Button
-      className="hover:border-border/10 ml-auto gap-1"
+      className="hover:border-border/10 mx-auto gap-1 sm:mr-0"
       variant="outline"
       asChild
     >
