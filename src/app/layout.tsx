@@ -6,6 +6,7 @@ import { type Metadata } from "next";
 import { TRPCReactProvider } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Analytics } from "@vercel/analytics/react";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -25,10 +26,11 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "bg-background min-h-screen bg-origin-padding pb-32 font-sans antialiased",
+          "min-h-screen bg-background bg-origin-padding pb-32 font-sans antialiased",
           fontSans.variable,
         )}
       >
+        <Analytics />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
