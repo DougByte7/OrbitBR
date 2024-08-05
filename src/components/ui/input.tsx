@@ -8,13 +8,14 @@ export interface InputProps
   rightSection?: React.ReactNode;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+const Input = React.forwardRef<HTMLLabelElement, InputProps>(
   ({ className, type, leftSection, rightSection, ...props }, ref) => {
     return (
       <label
+        ref={ref}
         className={cn(
-          "border-input/10 shadow-[0px_0px_48px_8px_rgba(0, 0, 0, 0.25)] ring-offset-background inline-flex w-full gap-3 rounded-md border bg-black/5 p-3 text-sm",
-          "focus-within:ring-ring focus-within:ring-2 focus-within:ring-offset-2",
+          "shadow-[0px_0px_48px_8px_rgba(0, 0, 0, 0.25)] bg-input-background inline-flex w-full gap-3 rounded-[2px] border border-input/10 p-3 text-sm ring-offset-background",
+          "focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
           className,
         )}
       >
@@ -28,7 +29,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             "disabled:cursor-not-allowed disabled:opacity-50",
           )}
           type={type}
-          ref={ref}
+          autoComplete="off"
           {...props}
         />
         {rightSection}
