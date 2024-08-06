@@ -9,8 +9,13 @@ import {
 export default function GameResult() {
   const userData = JSON.parse(
     localStorage.getItem("user:data") ??
-      '{"played":1,"victories":0,"sequence":0}',
-  ) as { played: number; victories: number; sequence: number };
+      '{"played":1,"victories":0,"sequence":0,"lastPlayed":0}',
+  ) as {
+    played: number;
+    victories: number;
+    sequence: number;
+    lastPlayed: number;
+  };
 
   return (
     <>

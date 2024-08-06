@@ -30,23 +30,35 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
 
     if (!guessedAnime) return;
 
+    const userDataKey = "user:data";
     const userData = JSON.parse(
-      localStorage.getItem("user:data") ??
-        '{"played":1,"victories":0,"sequence":0}',
-    ) as { played: number; victories: number; sequence: number };
+      localStorage.getItem(userDataKey) ??
+        '{"played":0,"victories":0,"sequence":0,"lastPlayed":0}',
+    ) as {
+      played: number;
+      victories: number;
+      sequence: number;
+      lastPlayed: number;
+    };
+
     userData.played += 1;
+    userData.lastPlayed = new Date().getTime();
+
+    if (userData.lastPlayed === 0) {
+      localStorage.removeItem(userDataKey);
+    }
 
     if (todayAnime.title === guessedAnime.title) {
       userData.victories += 1;
       userData.sequence += 1;
 
-      localStorage.setItem("user:data", JSON.stringify(userData));
+      localStorage.setItem(userDataKey, JSON.stringify(userData));
       showResult();
       return;
     }
 
     if (wrongGuesses.length === 4) {
-      localStorage.setItem("user:data", JSON.stringify(userData));
+      localStorage.setItem(userDataKey, JSON.stringify(userData));
       showResult();
       return;
     }

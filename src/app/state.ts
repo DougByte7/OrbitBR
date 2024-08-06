@@ -11,9 +11,27 @@ type Actions = {
   };
 };
 
+const getInitialView = (): State["view"] => {
+  const { lastPlayed } = JSON.parse(
+    localStorage.getItem("user:data") ??
+      '{"played":0,"victories":0,"sequence":0,"lastPlayed":0}',
+  ) as {
+    played: number;
+    victories: number;
+    sequence: number;
+    lastPlayed: number;
+  };
+
+  return lastPlayed &&
+    new Date(lastPlayed).toLocaleDateString() ===
+      new Date().toLocaleDateString()
+    ? "result"
+    : "game";
+};
+
 const useGameStore = create<State & Actions>()(
   immer((set) => ({
-    view: "game",
+    view: getInitialView(),
     actions: {
       showResult() {
         set((state) => {
