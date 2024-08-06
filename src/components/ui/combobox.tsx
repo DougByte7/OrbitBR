@@ -18,7 +18,7 @@ interface LabelValue {
 interface ComboboxProps {
   placeholder?: string;
   options: LabelValue[] | string[];
-  onChange?: (selected?: LabelValue | string) => void;
+  onChange?: (selected?: ComboboxProps["options"][number]) => void;
 }
 export function Combobox({ placeholder, options, onChange }: ComboboxProps) {
   const [query, setQuery] = useState<string | null>("");
@@ -47,19 +47,20 @@ export function Combobox({ placeholder, options, onChange }: ComboboxProps) {
     <HeadlessCombobox value={query} onChange={handleChange}>
       <ComboboxInput
         as={Input}
+        inputClassName="capitalize"
         leftSection={<Search size={20} />}
         placeholder={placeholder}
         value={query ?? ""}
         onChange={(event) => setQuery(event.target.value)}
       />
 
-      <ComboboxOptions anchor="bottom start" className="py-2">
+      <ComboboxOptions anchor="bottom" className="py-2">
         <div className="bg-input-background grid rounded-[2px] border border-border/10 p-1 empty:invisible">
           {filteredOptions.map((option) => (
             <ComboboxOption
               key={typeof option === "string" ? option : option.value}
               as={Button}
-              className="justify-start data-[focus]:bg-primary"
+              className="justify-start capitalize data-[focus]:bg-primary"
               variant="ghost"
               value={option}
             >

@@ -6,10 +6,14 @@ export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   leftSection?: React.ReactNode;
   rightSection?: React.ReactNode;
+  inputClassName?: string;
 }
 
 const Input = React.forwardRef<HTMLLabelElement, InputProps>(
-  ({ className, type, leftSection, rightSection, ...props }, ref) => {
+  (
+    { className, type, leftSection, rightSection, inputClassName, ...props },
+    ref,
+  ) => {
     return (
       <label
         ref={ref}
@@ -27,6 +31,7 @@ const Input = React.forwardRef<HTMLLabelElement, InputProps>(
             "focus-visible:outline-none",
             "file:border-0 file:bg-transparent file:text-sm file:font-medium",
             "disabled:cursor-not-allowed disabled:opacity-50",
+            inputClassName,
           )}
           type={type}
           autoComplete="off"

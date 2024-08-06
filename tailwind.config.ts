@@ -28,7 +28,10 @@ const config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        success: "#17F62D",
+        success: {
+          DEFAULT: "#17F62D",
+          foreground: "#050505",
+        },
         error: "rgba(255, 52, 52, 0.25)",
         primary: {
           DEFAULT: "hsl(var(--primary))",
