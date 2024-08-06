@@ -16,6 +16,7 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
   const [wrongGuesses, setWrongGuess] = useState<Anime[]>([]);
   const [currentGuess, setCurrentGuess] = useState<string | undefined>("");
   const { showResult } = useGameActions();
+  console.log(wrongGuesses);
 
   const handleGuess = () => {
     const guessedAnime = animeDB.find(
@@ -35,10 +36,16 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
     ) as { played: number; victories: number; sequence: number };
     userData.played += 1;
 
-    if (todayAnime.title === guessedAnime.title || wrongGuesses.length === 4) {
+    if (todayAnime.title === guessedAnime.title) {
       userData.victories += 1;
-      userData.sequence =
-        todayAnime.title === guessedAnime.title ? userData.sequence + 1 : 0;
+      userData.sequence += 1;
+
+      localStorage.setItem("user:data", JSON.stringify(userData));
+      showResult();
+      return;
+    }
+
+    if (wrongGuesses.length === 4) {
       localStorage.setItem("user:data", JSON.stringify(userData));
       showResult();
       return;

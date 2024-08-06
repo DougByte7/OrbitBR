@@ -12,7 +12,7 @@ export default function Game(props: GuessesProps) {
   const view = useGameView();
 
   return (
-    <div className="relative flex flex-col items-center justify-center gap-10">
+    <div className="relative flex h-screen flex-col items-center justify-center gap-10">
       <AnimatePresence mode="popLayout">
         {view === "game" && (
           <motion.div

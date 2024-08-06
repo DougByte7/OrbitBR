@@ -21,7 +21,10 @@ export default function GameResult() {
         </div>
         <div className="w-1/3 rounded-sm border border-border/10 bg-white/5 p-3 text-center">
           <div className="mb-3 text-2xl font-bold">
-            {(userData.victories / userData.played) * 10}%
+            {parseFloat(
+              ((userData.victories / userData.played) * 100).toFixed(2),
+            )}
+            %
           </div>
           <div className="text-sm text-muted">De vitórias</div>
         </div>
