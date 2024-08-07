@@ -19,7 +19,7 @@ export default function AnimeInfo({ anime }: AnimeInfoProps) {
     <div className="flex gap-10">
       <div className="relative">
         <Badge
-          className="absolute -left-[32px] top-8 before:absolute before:left-[1px] before:top-[calc(100%+1px)] before:h-0 before:w-0 before:border-b-[12px] before:border-l-[26px] before:border-y-transparent before:border-l-success"
+          className="absolute -left-[32px] top-6 before:absolute before:left-[1px] before:top-[calc(100%+1px)] before:h-0 before:w-0 before:border-b-[12px] before:border-l-[26px] before:border-y-transparent before:border-l-success"
           size="lg"
         >
           {anime.title}

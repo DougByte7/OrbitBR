@@ -18,12 +18,7 @@ export default async function Home() {
   const todayAnime = animeDB[dayOfTheYear]!;
 
   const animeList = Array.from(
-    new Set(
-      animeDB.flatMap((a) => [
-        a.title.toLocaleLowerCase(),
-        ...a.alternativeTitles.map((t) => t.toLocaleLowerCase()),
-      ]),
-    ),
+    new Set(animeDB.map((a) => a.title.toLocaleLowerCase())),
   );
 
   return (
