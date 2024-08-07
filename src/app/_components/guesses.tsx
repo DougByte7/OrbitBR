@@ -19,12 +19,7 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
 
   const handleGuess = () => {
     const guessedAnime = animeDB.find(
-      (a) =>
-        a.title.toLocaleLowerCase() === currentGuess?.toLocaleLowerCase() ||
-        a.alternativeTitles.some(
-          (title) =>
-            title.toLocaleLowerCase() === currentGuess?.toLocaleLowerCase(),
-        ),
+      (a) => a.title.toLocaleLowerCase() === currentGuess?.toLocaleLowerCase(),
     );
 
     if (!guessedAnime) return;
