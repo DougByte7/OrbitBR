@@ -16,7 +16,6 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
   const [wrongGuesses, setWrongGuess] = useState<Anime[]>([]);
   const [currentGuess, setCurrentGuess] = useState<string | undefined>("");
   const { showResult } = useGameActions();
-  console.log(wrongGuesses);
 
   const handleGuess = () => {
     const guessedAnime = animeDB.find(

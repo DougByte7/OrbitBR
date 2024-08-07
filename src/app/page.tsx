@@ -2,14 +2,20 @@ import { HydrateClient } from "@/trpc/server";
 import TopBar from "@/components/top-bar";
 import animeDB from "public/anime-db.json";
 import Game from "./_components/game";
+import { addDays } from "date-fns";
 
 export default async function Home() {
   const now = new Date();
-  const start = new Date(now.getFullYear(), 0, 0);
+  const start = new Date(
+    now.getHours() >= 12 ? addDays(now, 1).getFullYear() : now.getFullYear(),
+    0,
+    0,
+    12,
+  );
   const diff = now.getTime() - start.getTime();
   const oneDay = 1000 * 60 * 60 * 24;
-  const day = Math.floor(diff / oneDay);
-  const todayAnime = animeDB[day - 1]!;
+  const dayOfTheYear = Math.floor(diff / oneDay);
+  const todayAnime = animeDB[dayOfTheYear]!;
 
   const animeList = Array.from(
     new Set(

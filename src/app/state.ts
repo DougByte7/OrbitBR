@@ -12,6 +12,8 @@ type Actions = {
 };
 
 const getInitialView = (): State["view"] => {
+  if (typeof window === "undefined") return "game";
+
   const { lastPlayed } = JSON.parse(
     localStorage.getItem("user:data") ??
       '{"played":0,"victories":0,"sequence":0,"lastPlayed":0}',
