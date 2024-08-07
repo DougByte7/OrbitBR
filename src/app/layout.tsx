@@ -26,7 +26,8 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-background bg-origin-padding pb-32 font-sans antialiased",
+          "min-h-screen overflow-hidden bg-background bg-origin-padding pb-32 font-sans antialiased",
+          "before:absolute before:left-1/2 before:top-1/2 before:-z-10 before:h-[200%] before:w-[200%] before:-translate-x-1/2 before:-translate-y-1/2 before:rotate-12 before:bg-[url('/background.png')] before:bg-cover before:bg-repeat before:opacity-[0.02]",
           fontSans.variable,
         )}
       >
@@ -39,18 +40,6 @@ export default function RootLayout({
         >
           <TRPCReactProvider>{children}</TRPCReactProvider>
         </ThemeProvider>
-        <div className="pointer-events-none fixed left-1/2 top-1/2 -z-10 grid -translate-x-1/2 -translate-y-1/2 rotate-12 grid-cols-[repeat(5,468px)] gap-16 overflow-hidden opacity-[0.02]">
-          <div className="h-[698px] w-[468px] bg-[url('/background/1.png')]" />
-          <div className="h-[698px] w-[468px] bg-[url('/background/2.png')]" />
-          <div className="h-[698px] w-[468px] bg-[url('/background/3.png')]" />
-          <div className="h-[698px] w-[468px] bg-[url('/background/4.png')]" />
-          <div className="h-[698px] w-[468px] bg-[url('/background/5.png')]" />
-          <div className="h-[698px] w-[468px] bg-[url('/background/6.png')]" />
-          <div className="h-[698px] w-[468px] bg-[url('/background/7.png')]" />
-          <div className="h-[698px] w-[468px] bg-[url('/background/8.png')]" />
-          <div className="h-[698px] w-[468px] bg-[url('/background/9.png')]" />
-          <div className="h-[698px] w-[468px] bg-[url('/background/10.png')]" />
-        </div>
       </body>
     </html>
   );
