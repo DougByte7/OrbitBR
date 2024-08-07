@@ -1,12 +1,23 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { addDays } from "date-fns";
 
 export default function Countdown() {
   const computeCountdown = () => {
-    const today = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
-    const tomorrow = today + 1000 * 60 * 60 * 36;
-    return new Date(tomorrow - new Date().getTime());
+    const now = new Date();
+    const nextMidDay =
+      now.getHours() >= 12
+        ? addDays(now, 1).setHours(12, 0, 0, 0)
+        : new Date().setHours(12, 0, 0, 0);
+
+    const diff = nextMidDay - now.getTime();
+    const hours = diff / 1000 / 60 / 60;
+    const minutes = (hours - (hours | 0)) * 60;
+    const seconds = (minutes - (minutes | 0)) * 60;
+    const format = (n: number) => `${n | 0}`.padStart(2, "0");
+
+    return `${format(hours)}:${format(minutes)}:${format(seconds)}`;
   };
 
   const [countdown, setCountdown] = useState(computeCountdown);
@@ -21,19 +32,17 @@ export default function Countdown() {
 
   return (
     <Button
-      className="hover:border-border/10 mx-auto w-full gap-1 sm:mr-0 sm:w-auto"
+      className="mx-auto w-full gap-1 hover:border-border/10 sm:mr-0 sm:w-auto"
       variant="outline"
       asChild
     >
       <div>
         <span>Próximo anime em</span>
         <span
-          className="text-success inline-block w-14"
+          className="inline-block w-14 text-success"
           suppressHydrationWarning
         >
-          {countdown.getHours().toFixed().padStart(2, "0")}:
-          {countdown.getMinutes().toFixed().padStart(2, "0")}:
-          {countdown.getSeconds().toFixed().padStart(2, "0")}
+          {countdown}
         </span>
       </div>
     </Button>
