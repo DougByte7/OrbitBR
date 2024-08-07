@@ -5,20 +5,33 @@ import { Combobox } from "@/components/ui/combobox";
 import animeDB from "public/anime-db.json";
 import Image from "next/image";
 import { useState } from "react";
-import { useGameActions } from "../state";
+import { useGameActions, useGameLifes } from "../state";
+import { nanoid } from "@/lib/nanoid";
 
-export type Anime = (typeof animeDB)[number];
+export type Anime = {
+  _id: string;
+  title: string;
+  genres: string[];
+  image: string;
+  status: string;
+  synopsis: string;
+  author: string;
+  availableAt: string;
+};
 export interface GuessesProps {
   todayAnime: Anime;
   animeList: string[];
 }
 export default function Guesses({ todayAnime, animeList }: GuessesProps) {
-  const [wrongGuesses, setWrongGuess] = useState<Anime[]>([]);
+  const [wrongGuesses, setWrongGuess] = useState<(Anime & { id: string })[]>(
+    [],
+  );
   const [currentGuess, setCurrentGuess] = useState<string | undefined>("");
-  const { showResult } = useGameActions();
+  const { showResult, loseLife } = useGameActions();
+  const lifes = useGameLifes();
 
   const handleGuess = () => {
-    const guessedAnime = animeDB.find(
+    const guessedAnime = (animeDB as Anime[]).find(
       (a) => a.title.toLocaleLowerCase() === currentGuess?.toLocaleLowerCase(),
     );
 
@@ -51,14 +64,15 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
       return;
     }
 
-    if (wrongGuesses.length === 4) {
+    if (!(lifes - 1)) {
       localStorage.setItem(userDataKey, JSON.stringify(userData));
       showResult();
       return;
     }
 
+    loseLife();
     setWrongGuess((prev) => {
-      return [guessedAnime, ...prev];
+      return [{ ...guessedAnime, id: nanoid(10) }, ...prev];
     });
   };
 
@@ -79,12 +93,12 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
       </div>
       <div className="grid gap-3">
         <p className="my-4 text-center text-sm">
-          Você tem {5 - wrongGuesses.length} tentativas restantes
+          Você tem {lifes} tentativas restantes
         </p>
         {wrongGuesses.map((guess) => {
           return (
             <div
-              key={guess._id}
+              key={guess.id}
               className="flex w-full gap-3 rounded-[2px] border-l-4 border-[#FF3434] bg-error px-4 py-2"
             >
               <Image

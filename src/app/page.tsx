@@ -3,6 +3,7 @@ import TopBar from "@/components/top-bar";
 import animeDB from "public/anime-db.json";
 import Game from "./_components/game";
 import { addDays } from "date-fns";
+import type { Anime } from "./_components/guesses";
 
 export default async function Home() {
   const now = new Date();
@@ -15,10 +16,10 @@ export default async function Home() {
   const diff = now.getTime() - start.getTime();
   const oneDay = 1000 * 60 * 60 * 24;
   const dayOfTheYear = Math.floor(diff / oneDay);
-  const todayAnime = animeDB[dayOfTheYear]!;
+  const todayAnime = (animeDB as Anime[])[dayOfTheYear]!;
 
   const animeList = Array.from(
-    new Set(animeDB.map((a) => a.title.toLocaleLowerCase())),
+    new Set((animeDB as Anime[]).map((a) => a.title.toLocaleLowerCase())),
   );
 
   return (

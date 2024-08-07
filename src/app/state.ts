@@ -3,11 +3,13 @@ import { immer } from "zustand/middleware/immer";
 
 type State = {
   view: "game" | "result";
+  lifes: number;
 };
 
 type Actions = {
   actions: {
     showResult: () => void;
+    loseLife: () => void;
   };
 };
 
@@ -34,10 +36,16 @@ const getInitialView = (): State["view"] => {
 const useGameStore = create<State & Actions>()(
   immer((set) => ({
     view: getInitialView(),
+    lifes: 5,
     actions: {
       showResult() {
         set((state) => {
           state.view = "result";
+        });
+      },
+      loseLife() {
+        set((state) => {
+          state.lifes -= 1;
         });
       },
     },
@@ -46,3 +54,4 @@ const useGameStore = create<State & Actions>()(
 
 export const useGameActions = () => useGameStore((state) => state.actions);
 export const useGameView = () => useGameStore((state) => state.view);
+export const useGameLifes = () => useGameStore((state) => state.lifes);
