@@ -5,6 +5,8 @@ import Game from "./_components/game";
 import { addDays } from "date-fns";
 import type { Anime } from "./_components/guesses";
 
+export const revalidate = 60;
+
 export default async function Home() {
   const now = new Date();
   const start = new Date(
