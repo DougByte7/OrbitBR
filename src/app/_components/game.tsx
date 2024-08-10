@@ -20,7 +20,7 @@ export default function Game(props: GuessesProps) {
             exit={{ opacity: 0, x: -100 }}
           >
             <PixelatedImage
-              src={`/images/covers/${props.todayAnime._id}.webp`}
+              src={`https://utfs.io/f/${props.todayAnime.cover}`}
             />
 
             <Guesses {...props} />
@@ -83,14 +83,15 @@ function PixelatedImage({ src }: PixelatedImageProps) {
     }
 
     const newImage = new Image();
+    newImage.crossOrigin = "anonymous";
     newImage.src = src;
     newImage.onload = () => {
       ctx.drawImage(newImage, 0, 0, w, h);
       ctx.drawImage(canvas, 0, 0, w, h, 0, 0, width, height);
-      setSrc(canvas.toDataURL("image/png"));
+      setSrc(canvas.toDataURL("image/jpg"));
       setImage(image);
     };
-  }, [lifes]);
+  }, [lifes, src]);
 
   return imgSrc ? (
     // eslint-disable-next-line @next/next/no-img-element

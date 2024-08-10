@@ -9,7 +9,7 @@ export async function resizeImage(
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const imgBuffer = await sharp(imgBlob)
     .resize(width, height ?? width)
-    .avif({ quality: 85 })
+    .png({ quality: 85 })
     .toBuffer();
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return

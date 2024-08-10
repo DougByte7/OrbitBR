@@ -2,40 +2,27 @@
 import { Button } from "@/components/ui/button";
 import { WandSparkles } from "lucide-react";
 import { Combobox } from "@/components/ui/combobox";
-import animeDB from "public/anime-db";
 import Image from "next/image";
 import { useState } from "react";
 import { useGameActions, useGameLifes } from "../state";
 import { nanoid } from "@/lib/nanoid";
+import type { Anime } from "@prisma/client";
 
-export interface Anime {
-  _id: string;
-  title: string;
-  genres: string[];
-  image: string;
-  status: string;
-  synopsis: string;
-  author: string;
-  availableAt: string;
-}
+type GuessedAnime = Pick<Anime, "title" | "authors" | "cover">;
 export interface GuessesProps {
   todayAnime: Anime;
-  animeList: string[];
+  animeList: GuessedAnime[];
 }
 export default function Guesses({ todayAnime, animeList }: GuessesProps) {
-  const [wrongGuesses, setWrongGuess] = useState<(Anime & { id: string })[]>(
-    [],
-  );
-  const [currentGuess, setCurrentGuess] = useState<string | undefined>("");
+  const [wrongGuesses, setWrongGuess] = useState<
+    Array<GuessedAnime & { id: string }>
+  >([]);
+  const [currentGuess, setCurrentGuess] = useState<GuessedAnime | undefined>();
   const { showResult, loseLife } = useGameActions();
   const lifes = useGameLifes();
 
   const handleGuess = () => {
-    const guessedAnime = (animeDB as Anime[]).find(
-      (a) => a.title.toLocaleLowerCase() === currentGuess?.toLocaleLowerCase(),
-    );
-
-    if (!guessedAnime) return;
+    if (!currentGuess) return;
 
     const userDataKey = "user:data";
     const userData = JSON.parse(
@@ -55,7 +42,7 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
       localStorage.removeItem(userDataKey);
     }
 
-    if (todayAnime.title === guessedAnime.title) {
+    if (todayAnime.title === currentGuess.title) {
       userData.victories += 1;
       userData.sequence += 1;
 
@@ -72,8 +59,12 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
 
     loseLife();
     setWrongGuess((prev) => {
-      return [{ ...guessedAnime, id: nanoid(10) }, ...prev];
+      return [{ ...currentGuess, id: nanoid(10) }, ...prev];
     });
+  };
+
+  const handleSetGuess = (selected?: string) => {
+    setCurrentGuess(animeList.find((a) => a.title === selected));
   };
 
   return (
@@ -81,9 +72,9 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
       <div className="flex items-center gap-2 sm:gap-4">
         <Combobox
           placeholder="Qual anime está buscando?"
-          options={animeList}
+          options={animeList.map((a) => a.title)}
           // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
-          onChange={setCurrentGuess as any}
+          onChange={handleSetGuess as any}
         />
 
         <Button disabled={!currentGuess} onClick={handleGuess}>
@@ -103,14 +94,14 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
             >
               <Image
                 className="rounded-[2px]"
-                src={guess.image}
+                src={`https://utfs.io/f/${guess.cover}`}
                 alt={`Capa do anime: ${guess.title}`}
                 width={34}
                 height={46}
               />
               <div>
                 <div className="font-bold">{guess.title}</div>
-                <div className="text-sm">{guess.genres.join(", ")}</div>
+                <div className="text-sm">{guess.authors.join(", ")}</div>
               </div>
             </div>
           );

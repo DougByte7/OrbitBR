@@ -1,12 +1,13 @@
 import React from "react";
 import Image from "next/image";
-import type { Anime } from "./guesses";
 import { Badge } from "@/components/ui/badge";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import type { Anime } from "@prisma/client";
+
 interface AnimeInfoProps {
   anime: Anime;
 }
@@ -26,7 +27,7 @@ export default function AnimeInfo({ anime }: AnimeInfoProps) {
         </Badge>
         <Image
           className="rounded-[2px]"
-          src={anime.image}
+          src={`https://utfs.io/f/${anime.cover}`}
           alt="Capa do anime"
           width={257}
           height={382}
@@ -67,13 +68,15 @@ export default function AnimeInfo({ anime }: AnimeInfoProps) {
 
         <div className="mt-4">
           <div className="mb-3 text-xs">Disponível em:</div>
-          <Image
-            className="rounded-[2px]"
-            src={`/images/logo_crunchyroll.png`}
-            alt="Logo Crunchyroll"
-            width={138}
-            height={27}
-          />
+          <a href={anime.streamingUrl} target="_blank">
+            <Image
+              className="rounded-[2px]"
+              src={`/images/logo_${anime.streamingAt.toLowerCase()}.png`}
+              alt={`Logo ${anime.streamingAt}`}
+              width={138}
+              height={27}
+            />
+          </a>
         </div>
       </div>
     </div>

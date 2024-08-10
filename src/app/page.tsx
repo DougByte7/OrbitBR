@@ -1,9 +1,7 @@
-import { HydrateClient } from "@/trpc/server";
+import { api, HydrateClient } from "@/trpc/server";
 import TopBar from "@/components/top-bar";
-import animeDB from "public/anime-db";
 import Game from "./_components/game";
 import { addDays } from "date-fns";
-import type { Anime } from "./_components/guesses";
 
 export const revalidate = 60;
 
@@ -18,18 +16,22 @@ export default async function Home() {
   const diff = now.getTime() - start.getTime();
   const oneDay = 1000 * 60 * 60 * 24;
   const dayOfTheYear = Math.floor(diff / oneDay);
-  const todayAnime = (animeDB as Anime[])[dayOfTheYear]!;
-
-  const animeList = Array.from(
-    new Set((animeDB as Anime[]).map((a) => a.title.toLocaleLowerCase())),
-  );
+  const todayAnime = await api.anime.getAnimeOfTheDay(dayOfTheYear);
+  const animeList = await api.anime.getAll();
 
   return (
     <HydrateClient>
       <main className="flex flex-col items-center justify-center gap-10 px-4">
         <TopBar />
 
-        <Game todayAnime={todayAnime} animeList={animeList} />
+        <Game
+          todayAnime={todayAnime[0]}
+          animeList={animeList.map(({ title, authors, cover }) => ({
+            title,
+            authors,
+            cover,
+          }))}
+        />
       </main>
     </HydrateClient>
   );

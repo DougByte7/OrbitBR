@@ -1,10 +1,16 @@
-import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  privateProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
 import { animeSchema } from "@/app/cms/schemas/anime-schema";
 import { nanoid } from "@/lib/nanoid";
 import { utapi } from "@/server/uploadthing";
 import { TRPCError } from "@trpc/server";
 import { resizeImage } from "@/lib/resizeImage";
 import { z } from "zod";
+import type { Anime } from "@prisma/client";
+import { isLeapYear } from "date-fns";
 
 export const animeRouter = createTRPCRouter({
   create: privateProcedure
@@ -53,11 +59,22 @@ export const animeRouter = createTRPCRouter({
         },
       });
     }),
-  getAll: privateProcedure.query(async ({ ctx }) => {
+  getAll: publicProcedure.query(async ({ ctx }) => {
     return ctx.db.anime.findMany();
   }),
-  getAllNames: privateProcedure.query(async ({ ctx }) => {
+  getAllNames: publicProcedure.query(async ({ ctx }) => {
     const animes = await ctx.db.anime.findMany();
     return animes.map((anime) => anime.title);
   }),
+  getAnimeOfTheDay: publicProcedure
+    .input(z.number().min(0).max(366))
+    .query(async ({ ctx, input }) => {
+      const seed = input / (isLeapYear(new Date()) ? 366 : 365);
+      return ctx.db.$queryRaw<[Anime]>`
+      SELECT *, setseed(${seed})::Text
+      FROM "Anime"
+      ORDER BY random()      
+      LIMIT 1
+`;
+    }),
 });
