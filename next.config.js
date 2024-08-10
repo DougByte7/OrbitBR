@@ -10,8 +10,8 @@ const config = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "cdn.myanimelist.net",
-        port: "",
+        hostname: "utfs.io",
+        pathname: "/f/*",
       },
     ],
   },

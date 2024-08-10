@@ -3,8 +3,12 @@ import { Button } from "@/components/ui/button";
 import Countdown from "./components/countdown";
 import { IconBrandDiscordFilled } from "@tabler/icons-react";
 import { HandHeart } from "lucide-react";
+import type { ReactNode } from "react";
 
-export default async function TopBar() {
+interface TopBarProps {
+  children?: ReactNode;
+}
+export default async function TopBar({ children }: TopBarProps) {
   return (
     <header className="top-0 z-10 flex w-full items-center justify-center border-b border-border/5 bg-[rgba(19,18,20,0.50)] py-4 sm:sticky sm:h-[4.375rem] sm:py-0">
       <div className="flex w-full max-w-[1320px] flex-wrap justify-between gap-3 sm:gap-12">
@@ -27,6 +31,7 @@ export default async function TopBar() {
         </div>
 
         <Countdown />
+        {children}
       </div>
     </header>
   );

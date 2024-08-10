@@ -2,13 +2,13 @@
 import { Button } from "@/components/ui/button";
 import { WandSparkles } from "lucide-react";
 import { Combobox } from "@/components/ui/combobox";
-import animeDB from "public/anime-db.json";
+import animeDB from "public/anime-db";
 import Image from "next/image";
 import { useState } from "react";
 import { useGameActions, useGameLifes } from "../state";
 import { nanoid } from "@/lib/nanoid";
 
-export type Anime = {
+export interface Anime {
   _id: string;
   title: string;
   genres: string[];
@@ -17,7 +17,7 @@ export type Anime = {
   synopsis: string;
   author: string;
   availableAt: string;
-};
+}
 export interface GuessesProps {
   todayAnime: Anime;
   animeList: string[];

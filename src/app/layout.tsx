@@ -31,7 +31,7 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-        <div className="h-screen overflow-auto pb-32">
+        <div className="h-screen overflow-auto">
           <Analytics />
           <ThemeProvider
             attribute="class"

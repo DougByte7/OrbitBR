@@ -1,6 +1,6 @@
 import { HydrateClient } from "@/trpc/server";
 import TopBar from "@/components/top-bar";
-import animeDB from "public/anime-db.json";
+import animeDB from "public/anime-db";
 import Game from "./_components/game";
 import { addDays } from "date-fns";
 import type { Anime } from "./_components/guesses";
