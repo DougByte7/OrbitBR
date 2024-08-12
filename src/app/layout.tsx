@@ -7,6 +7,7 @@ import { TRPCReactProvider } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/react";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -33,14 +34,16 @@ export default function RootLayout({
       >
         <div className="h-screen overflow-auto">
           <Analytics />
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <TRPCReactProvider>{children}</TRPCReactProvider>
-          </ThemeProvider>
+          <ClerkProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <TRPCReactProvider>{children}</TRPCReactProvider>
+            </ThemeProvider>
+          </ClerkProvider>
         </div>
       </body>
     </html>

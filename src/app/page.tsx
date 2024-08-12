@@ -2,6 +2,7 @@ import { api, HydrateClient } from "@/trpc/server";
 import TopBar from "@/components/top-bar";
 import Game from "./_components/game";
 import { addDays } from "date-fns";
+import { SignedIn, SignedOut, SignUpButton, UserButton } from "@clerk/nextjs";
 
 export const revalidate = 60;
 
@@ -22,7 +23,14 @@ export default async function Home() {
   return (
     <HydrateClient>
       <main className="flex flex-col items-center justify-center gap-10 px-4">
-        <TopBar />
+        <TopBar>
+          <SignedOut>
+            <SignUpButton>Entrar</SignUpButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </TopBar>
 
         <Game
           todayAnime={todayAnime}

@@ -1,5 +1,4 @@
 import React from "react";
-import { ClerkProvider } from "@clerk/nextjs";
 
 import "@mantine/core/styles.css";
 
@@ -42,11 +41,10 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
-      <ClerkProvider>
-        <MantineProvider forceColorScheme="dark" theme={theme}>
-          <ModalsProvider>{children}</ModalsProvider>
-        </MantineProvider>
-      </ClerkProvider>
+
+      <MantineProvider forceColorScheme="dark" theme={theme}>
+        <ModalsProvider>{children}</ModalsProvider>
+      </MantineProvider>
     </>
   );
 }
