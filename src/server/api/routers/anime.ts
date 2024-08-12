@@ -69,9 +69,14 @@ export const animeRouter = createTRPCRouter({
     .input(z.number().min(0).max(366))
     .query(async ({ ctx, input }) => {
       const seed = input / 366;
+
+      await ctx.db.$executeRaw`SELECT setseed(${seed})`;
       const animeOfTheDay = await ctx.db.$queryRaw<[Anime]>`
-        SELECT setseed(${seed});
-        SELECT * FROM "Anime" ORDER BY random() LIMIT 1;`;
+       SELECT * 
+       FROM "Anime"
+       ORDER BY random() 
+       LIMIT 1`;
+
       return animeOfTheDay[0];
     }),
 });
