@@ -13,13 +13,26 @@ import {
 import { modals } from "@mantine/modals";
 import { Trash2Icon } from "lucide-react";
 import type { Anime } from "@prisma/client";
-import type { animeSchema } from "../schemas/anime-schema";
 import AnimeForm from "./anime-form";
 import { api } from "@/trpc/react";
-import type { z } from "zod";
+import { useSearchParams } from "next/navigation";
 
 export default function AnimeList() {
-  const { data, isLoading } = api.anime.getAll.useQuery();
+  const params = useSearchParams();
+
+  const { data, isLoading } = api.anime.getAll.useQuery({
+    status: params.get("status")
+      ? (params.get("status") as "unreleased" | "ongoing" | "complete")
+      : undefined,
+    title: params.get("title") ? params.get("title")! : undefined,
+    authors: params.get("authors")
+      ? params.get("authors")?.split(",")
+      : undefined,
+    genres: params.get("genres") ? params.get("genres")?.split(",") : undefined,
+    streamingAt: params.get("streamingAt")
+      ? params.get("streamingAt")!
+      : undefined,
+  });
 
   if (!data || isLoading)
     return (
@@ -89,7 +102,7 @@ interface WithAnimeProp {
 function CardAnime({ anime }: WithAnimeProp) {
   const apiUtils = api.useUtils();
 
-  const { mutate } = api.anime.create.useMutation({
+  const { mutate: deleteAnime } = api.anime.delete.useMutation({
     onSuccess() {
       modals.closeAll();
       void apiUtils.anime.getAll.invalidate();
@@ -97,7 +110,7 @@ function CardAnime({ anime }: WithAnimeProp) {
     onError(error) {
       console.error(error);
       alert(
-        "Erro ao tentar salvar o anime, abra o console para mais informações",
+        "Erro ao tentar deletar o anime, abra o console para mais informações",
       );
     },
   });
@@ -108,24 +121,19 @@ function CardAnime({ anime }: WithAnimeProp) {
       children: <Text size="sm">O anime sera deletado permanentemente.</Text>,
       labels: { confirm: "Confirmar", cancel: "Cancelar" },
       centered: true,
-      onCancel: () => console.log("Cancel"),
-      onConfirm: () => console.log("Confirmed"),
+      onConfirm: () => deleteAnime(anime.id),
     });
-
-  const handleSave = (values: z.infer<typeof animeSchema>) => {
-    const reader = new FileReader();
-    reader.onload = (e: ProgressEvent<FileReader>) => {
-      const cover = (e.target?.result as string) ?? "";
-      mutate({ ...values, cover });
-    };
-    reader.readAsDataURL(values.cover as File);
-  };
 
   const handleEdit = (anime: WithAnimeProp["anime"]) => () =>
     modals.open({
       size: "850px",
       title: anime.title,
-      children: <AnimeForm anime={anime} onSave={handleSave} />,
+      children: (
+        <AnimeForm
+          anime={anime}
+          useSaveMutation={api.anime.update.useMutation}
+        />
+      ),
       centered: true,
     });
 

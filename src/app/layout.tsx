@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/react";
 import { ClerkProvider } from "@clerk/nextjs";
+import { HydrateClient } from "@/trpc/server";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -41,7 +42,9 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <TRPCReactProvider>{children}</TRPCReactProvider>
+              <TRPCReactProvider>
+                <HydrateClient>{children}</HydrateClient>
+              </TRPCReactProvider>
             </ThemeProvider>
           </ClerkProvider>
         </div>

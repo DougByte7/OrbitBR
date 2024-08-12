@@ -1,4 +1,4 @@
-import { api, HydrateClient } from "@/trpc/server";
+import { api } from "@/trpc/server";
 import TopBar from "@/components/top-bar";
 import Game from "./_components/game";
 import { addDays } from "date-fns";
@@ -20,19 +20,17 @@ export default async function Home() {
   const animeList = await api.anime.getAll();
 
   return (
-    <HydrateClient>
-      <main className="flex flex-col items-center justify-center gap-10 px-4">
-        <TopBar />
+    <main className="flex flex-col items-center justify-center gap-10 px-4">
+      <TopBar />
 
-        <Game
-          todayAnime={todayAnime}
-          animeList={animeList.map(({ title, authors, cover }) => ({
-            title,
-            authors,
-            cover,
-          }))}
-        />
-      </main>
-    </HydrateClient>
+      <Game
+        todayAnime={todayAnime}
+        animeList={animeList.map(({ title, authors, cover }) => ({
+          title,
+          authors,
+          cover,
+        }))}
+      />
+    </main>
   );
 }

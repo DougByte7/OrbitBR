@@ -16,21 +16,29 @@ import { SaveIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { ACCEPTED_IMAGE_TYPES, animeSchema } from "../schemas/anime-schema";
-import { api } from "@/trpc/react";
 import type { z } from "zod";
 import type { Anime } from "@prisma/client";
+import { modals } from "@mantine/modals";
+import { api } from "@/trpc/react";
+import { genres, streamings } from "@/app/constants/animes";
 
-interface AnimeEditModalProps {
-  anime?: Anime;
-  onSave: (values: z.infer<typeof animeSchema>) => void;
-}
-export default function AnimeForm({ anime, onSave }: AnimeEditModalProps) {
-  const { isPending } = api.anime.create.useMutation({});
-
+type AnimeEditModalProps =
+  | {
+      anime?: never;
+      useSaveMutation: typeof api.anime.create.useMutation;
+    }
+  | {
+      anime: Anime;
+      useSaveMutation: typeof api.anime.update.useMutation;
+    };
+export default function AnimeForm({
+  anime,
+  useSaveMutation,
+}: AnimeEditModalProps) {
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
-      cover: null as File | null,
+      cover: anime?.cover ?? ("" as File | string),
       title: anime?.title ?? "",
       status: anime?.status ?? "",
       synopsis: anime?.synopsis ?? "",
@@ -42,10 +50,45 @@ export default function AnimeForm({ anime, onSave }: AnimeEditModalProps) {
     validate: zodResolver(animeSchema),
   });
 
+  const apiUtils = api.useUtils();
+  const { mutate, isPending } = useSaveMutation({
+    onSuccess() {
+      modals.closeAll();
+      void apiUtils.anime.getAll.invalidate();
+    },
+    onError(error) {
+      console.error(error);
+      alert(
+        "Erro ao tentar salvar o anime, abra o console para mais informações",
+      );
+    },
+  });
+  const handleSave = (values: z.infer<typeof animeSchema>) => {
+    const { cover } = values;
+    if (typeof cover === "string") {
+      // @ts-expect-error this mutation may be Create Or Update, Update NEED the ID
+      mutate({ ...values, cover, id: anime.id });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e: ProgressEvent<FileReader>) => {
+      const cover = (e.target?.result as string) ?? "";
+      if (anime) {
+        // @ts-expect-error this mutation may be Create Or Update, Update NEED the ID
+        mutate({ ...values, cover, id: anime.id });
+      } else {
+        // @ts-expect-error this mutation may be Create Or Update, Update NEED the ID
+        mutate({ ...values, cover });
+      }
+    };
+    reader.readAsDataURL(cover);
+  };
+
   return (
     <form
       className="grid grid-cols-2 items-center gap-4"
-      onSubmit={form.onSubmit(onSave)}
+      onSubmit={form.onSubmit(handleSave)}
     >
       <TextInput
         className="col-span-2"
@@ -110,26 +153,3 @@ export default function AnimeForm({ anime, onSave }: AnimeEditModalProps) {
     </form>
   );
 }
-
-const streamings = ["Crunchyroll", "Netflix", "Prime Video"];
-
-const genres = [
-  "Aventura",
-  "Ação",
-  "Boys Love",
-  "Comédia",
-  "Cyberpunk",
-  "Drama",
-  "Ecchi",
-  "Esportes",
-  "Fantasia",
-  "Ficção Científica",
-  "Girls Love",
-  "Gourmet",
-  "Horror",
-  "Mistério",
-  "Romance",
-  "Sobrenatural",
-  "Suspense",
-  "Vida Cotidiana",
-];

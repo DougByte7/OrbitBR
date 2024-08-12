@@ -91,6 +91,7 @@ function PixelatedImage({ src }: PixelatedImageProps) {
       setSrc(canvas.toDataURL("image/jpg"));
       setImage(image);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lifes, src]);
 
   return imgSrc ? (

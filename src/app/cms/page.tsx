@@ -4,11 +4,19 @@ import { currentUser } from "@clerk/nextjs/server";
 import AnimeList from "./components/anime-list";
 import NewAnime from "./components/new-anime-button";
 import Image from "next/image";
-import { Autocomplete, Stack } from "@mantine/core";
+import {
+  ActionIcon,
+  Autocomplete,
+  Select,
+  Stack,
+  TagsInput,
+} from "@mantine/core";
 import TopBar from "@/components/top-bar";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { api } from "@/trpc/server";
+import { genres, streamings } from "../constants/animes";
+import { FilterIcon } from "lucide-react";
 
 export default async function CMS({
   searchParams,
@@ -63,6 +71,8 @@ async function AnimeFilters({ params }: AnimeFilterProps) {
 
   return (
     <form className="mx-auto flex w-full max-w-[1200px] justify-center gap-3">
+      <NewAnime />
+
       <Autocomplete
         name="title"
         defaultValue={params?.title}
@@ -71,8 +81,38 @@ async function AnimeFilters({ params }: AnimeFilterProps) {
         data={animeNames}
         limit={5}
       />
-
-      <NewAnime />
+      <TagsInput
+        name="authors"
+        defaultValue={params?.authors ? params?.authors?.split(",") : undefined}
+        placeholder="Autores"
+      />
+      <TagsInput
+        name="genres"
+        defaultValue={params?.genres ? params?.genres?.split(",") : undefined}
+        className="col-span-2"
+        placeholder="Gêneros"
+        data={genres}
+      />
+      <Select
+        clearable
+        name="status"
+        defaultValue={params?.status}
+        placeholder="Status"
+        data={[
+          { label: "Concluído", value: "complete" },
+          { label: "Em andamento", value: "ongoing" },
+          { label: "Não estreado", value: "unreleased" },
+        ]}
+      />
+      <Autocomplete
+        name="streamingAt"
+        defaultValue={params?.streamingAt}
+        placeholder="Streaming"
+        data={streamings}
+      />
+      <ActionIcon type="submit" size="lg">
+        <FilterIcon />
+      </ActionIcon>
     </form>
   );
 }

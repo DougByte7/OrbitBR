@@ -9,11 +9,12 @@ export const ACCEPTED_IMAGE_TYPES = [
 
 export const animeSchema = z.object({
   cover: z
-    .any()
+    .custom<File>()
     .refine(
-      (file?: File) => ACCEPTED_IMAGE_TYPES.includes(file?.type ?? "no file"),
+      (file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type ?? "no file"),
       "Only .jpg, .jpeg, .png, .avif and .webp formats are supported.",
-    ),
+    )
+    .or(z.string().endsWith(".png")),
   title: z.string().trim().min(2, "O título de ter pelo menos 2 letras."),
   status: z.string().trim().min(1, "O status é necessário."),
   synopsis: z.string().trim().min(1, "A sinopse é necessária."),
