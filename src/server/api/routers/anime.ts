@@ -10,7 +10,6 @@ import { TRPCError } from "@trpc/server";
 import { resizeImage } from "@/lib/resizeImage";
 import { z } from "zod";
 import type { Anime } from "@prisma/client";
-import { isLeapYear } from "date-fns";
 
 export const animeRouter = createTRPCRouter({
   create: privateProcedure
@@ -69,12 +68,10 @@ export const animeRouter = createTRPCRouter({
   getAnimeOfTheDay: publicProcedure
     .input(z.number().min(0).max(366))
     .query(async ({ ctx, input }) => {
-      const seed = input / (isLeapYear(new Date()) ? 366 : 365);
-      return ctx.db.$queryRaw<[Anime]>`
-      SELECT *, setseed(${seed})::Text
-      FROM "Anime"
-      ORDER BY random()      
-      LIMIT 1
-`;
+      const seed = input / 366;
+      const animeOfTheDay = await ctx.db.$queryRaw<[Anime]>`
+        SELECT setseed(${seed});
+        SELECT * FROM "Anime" ORDER BY random() LIMIT 1;`;
+      return animeOfTheDay[0];
     }),
 });

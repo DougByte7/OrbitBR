@@ -25,7 +25,7 @@ export default async function Home() {
         <TopBar />
 
         <Game
-          todayAnime={todayAnime[0]}
+          todayAnime={todayAnime}
           animeList={animeList.map(({ title, authors, cover }) => ({
             title,
             authors,
