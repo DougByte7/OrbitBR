@@ -2,7 +2,6 @@ import { api, HydrateClient } from "@/trpc/server";
 import TopBar from "@/components/top-bar";
 import Game from "./_components/game";
 import { addDays } from "date-fns";
-import { SignedIn, SignedOut, SignUpButton, UserButton } from "@clerk/nextjs";
 
 export const revalidate = 60;
 
