@@ -24,7 +24,7 @@ type Actions = {
 
 const useGameStore = create<State & Actions>()(
   persist(
-    immer((set) => ({
+    immer((set, get) => ({
       view: "game",
       lifes: 5,
       timesPlayed: 0,
@@ -70,7 +70,7 @@ const useGameStore = create<State & Actions>()(
       partialize: (state) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { actions, ...rest } = state;
-        Object.fromEntries(Object.entries(rest));
+        return rest;
       },
     },
   ),
