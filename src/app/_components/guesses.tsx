@@ -29,8 +29,6 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
       return;
     }
 
-    console.log({loseLife});
-    
     loseLife();
     setWrongGuess((prev) => {
       return [{ ...currentGuess, id: nanoid(5) }, ...prev];
@@ -56,7 +54,7 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
           <span className="hidden sm:inline">Adivinhar</span>
         </Button>
       </div>
-      <div className="grid gap-3">
+      <div className="grid gap-3 pb-32">
         <p className="my-4 text-center text-sm">
           Você tem {lifes} tentativas restantes
         </p>
@@ -74,8 +72,10 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
                 height={46}
               />
               <div>
-                <div className="font-bold">{guess.title}</div>
-                <div className="text-sm">{guess.authors.join(", ")}</div>
+                <div>{guess.title}</div>
+                <div className="text-sm text-muted">
+                  {guess.authors.join(", ")}
+                </div>
               </div>
             </div>
           );
