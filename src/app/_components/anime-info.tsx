@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +8,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import type { Anime } from "@prisma/client";
+import { useDisclosure } from "@mantine/hooks";
 
 interface AnimeInfoProps {
   anime: Anime;
@@ -17,7 +19,7 @@ export default function AnimeInfo({ anime }: AnimeInfoProps) {
   const hiddenText = anime.synopsis.slice(textSize);
 
   return (
-    <div className="flex gap-10">
+    <div className="flex flex-col items-center justify-center gap-10 sm:flex-row">
       <div className="relative">
         <Badge
           className="absolute -left-[32px] top-6 before:absolute before:left-[1px] before:top-[calc(100%+1px)] before:h-0 before:w-0 before:border-b-[12px] before:border-l-[26px] before:border-y-transparent before:border-l-success"
@@ -43,32 +45,15 @@ export default function AnimeInfo({ anime }: AnimeInfoProps) {
           ))}
         </div>
 
-        <Collapsible>
-          <p className="max-w-[438px] text-sm text-muted">
-            {text}
-            {!!hiddenText && (
-              <>
-                <CollapsibleContent>{hiddenText}</CollapsibleContent>
-                <CollapsibleTrigger asChild>
-                  <span>
-                    ...{" "}
-                    <span className="font-medium text-success">
-                      Ver&nbsp;mais
-                    </span>
-                  </span>
-                </CollapsibleTrigger>
-              </>
-            )}
-          </p>
-        </Collapsible>
+        <Synopsis text={text} hiddenText={hiddenText} />
 
         <Badge className="w-fit" variant="secondary">
           {anime.status}
         </Badge>
 
-        <div className="mt-4">
-          <div className="mb-3 text-xs">Disponível em:</div>
-          <a href={anime.streamingUrl} target="_blank">
+        <div className="mt-4 grid items-start gap-3">
+          <div className="text-xs">Disponível em:</div>
+          <a className="w-fit" href={anime.streamingUrl} target="_blank">
             <Image
               className="rounded-[2px]"
               src={`/images/logo_${anime.streamingAt.toLowerCase()}.png`}
@@ -80,5 +65,40 @@ export default function AnimeInfo({ anime }: AnimeInfoProps) {
         </div>
       </div>
     </div>
+  );
+}
+
+interface SynopsisProps {
+  text: string;
+  hiddenText: string;
+}
+function Synopsis({ text, hiddenText }: SynopsisProps) {
+  const [open, { toggle }] = useDisclosure(false);
+
+  return (
+    <Collapsible open={open} onOpenChange={toggle}>
+      <p className="max-w-[300px] text-sm text-muted sm:max-w-[438px]">
+        {text}
+        {!!hiddenText && (
+          <>
+            <CollapsibleContent className="inline">
+              {hiddenText}
+            </CollapsibleContent>
+            <CollapsibleTrigger asChild>
+              {open ? (
+                <span className="font-medium text-success">{" "}Ver&nbsp;menos</span>
+              ) : (
+                <span>
+                  ...{" "}
+                  <span className="font-medium text-success">
+                    Ver&nbsp;mais
+                  </span>
+                </span>
+              )}
+            </CollapsibleTrigger>
+          </>
+        )}
+      </p>
+    </Collapsible>
   );
 }

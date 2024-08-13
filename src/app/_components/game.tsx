@@ -27,7 +27,7 @@ export default function Game(props: GuessesProps) {
           </motion.div>
         )}
         {view === "result" && (
-          <div className="absolute top-0">
+          <div className="absolute top-0 pb-32">
             <motion.div
               key={"animeInfo"}
               className="flex w-max flex-col items-center justify-center gap-10"
