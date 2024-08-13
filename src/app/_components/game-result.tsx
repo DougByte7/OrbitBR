@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { RiInstagramFill, RiTwitterXFill } from "@remixicon/react";
+import { RiTwitterXFill } from "@remixicon/react";
 import {
   useGameTimesPlayed,
   useGameTotalVictories,
@@ -30,14 +30,15 @@ export default function GameResult() {
           <div className="mb-2 text-2xl font-bold">🔥{victoryStreak}</div>
           <div className="text-sm text-muted">Sequência de vitórias</div>
           <Image
-            className="absolute -bottom-16 -right-5 rotate-12 sm:bottom-[unset] sm:right-0 sm:top-0 sm:-translate-y-1/2 sm:translate-x-1/2"
+            className="absolute -bottom-16 -right-5 size-28 rotate-12 sm:bottom-[unset] sm:right-0 sm:top-0 sm:-translate-y-1/2 sm:translate-x-1/2"
             style={{
               filter:
                 "drop-shadow(0px 2px 0px white) drop-shadow(0px -2px 0px white) drop-shadow(2px 0px 0px white) drop-shadow(-2px 0px 0px white)",
             }}
             src="/favicon.webp"
-            width={107}
-            height={107}
+            width={500}
+            height={500}
+            quality={100}
             alt="Orbit-chan"
           />
         </div>
@@ -48,7 +49,6 @@ export default function GameResult() {
           Conheça&nbsp;as&nbsp;redes&nbsp;sociais da Orbit Station!
         </div>
         <div className="flex gap-4">
-          <RiInstagramFill />
           <a href="https://x.com/orbit_stt" target="_blank">
             <RiTwitterXFill />
           </a>
