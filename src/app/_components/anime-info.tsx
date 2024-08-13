@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import React from "react";
 import Image from "next/image";
@@ -54,7 +55,7 @@ export default function AnimeInfo({ anime }: AnimeInfoProps) {
         <div className="mt-4 grid items-start gap-3">
           <div className="text-xs">Disponível em:</div>
           <div className="flex max-w-[300px] flex-wrap items-center gap-3 sm:max-w-[438px]">
-            {anime.streamingUrl.map((url) => (
+            {(anime.streamingUrl as string[]).map((url) => (
               <a key={url} className="w-fit" href={url} target="_blank">
                 <img
                   className="h-[27px rounded-[2px]"
