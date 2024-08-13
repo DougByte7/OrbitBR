@@ -12,17 +12,23 @@ datasource db {
 }
 
 model Anime {
-    id           String   @id // NanoID from the backend
+    id           String            @id // NanoID from the backend
     cover        String
     title        String
     status       String
     synopsis     String
     authors      String[]
     genres       String[]
-    streamingAt  String
-    streamingUrl String
-    createdAt    DateTime @default(now())
-    updatedAt    DateTime @updatedAt
+    streamingAt  String[]
+    streamingUrl String[]
+    createdAt    DateTime          @default(now())
+    updatedAt    DateTime          @updatedAt
+    todayAnime   TodayGameResults?
 
     @@index([title])
+}
+
+model TodayGameResults {
+    anime   Anime  @relation(fields: [animeId], references: [id])
+    animeId String @unique
 }
