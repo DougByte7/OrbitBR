@@ -17,26 +17,26 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
   const [wrongGuesses, setWrongGuess] = useState<
     Array<GuessedAnime & { id: string }>
   >([]);
-  const [currentGuess, setCurrentGuess] = useState<GuessedAnime | undefined>();
+  const [guess, setGuess] = useState("");
   const { gameWin, loseLife } = useGameActions();
   const lifes = useGameLifes();
 
   const handleGuess = () => {
-    if (!currentGuess) return;
+    if (!guess) return;
 
-    if (todayAnime.title === currentGuess.title) {
+    const guessedAnime = animeList.find((a) => a.title === guess);
+    setGuess("");
+    if (!guessedAnime) return;
+
+    if (todayAnime.title === guessedAnime.title) {
       gameWin();
       return;
     }
 
     loseLife();
     setWrongGuess((prev) => {
-      return [{ ...currentGuess, id: nanoid(5) }, ...prev];
+      return [{ ...guessedAnime, id: nanoid(5) }, ...prev];
     });
-  };
-
-  const handleSetGuess = (selected?: string) => {
-    setCurrentGuess(animeList.find((a) => a.title === selected));
   };
 
   return (
@@ -45,11 +45,12 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
         <Combobox
           placeholder="Qual anime está buscando?"
           options={animeList.map((a) => a.title)}
+          value={guess}
           // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
-          onChange={handleSetGuess as any}
+          onChange={setGuess}
         />
 
-        <Button disabled={!currentGuess} onClick={handleGuess}>
+        <Button disabled={!guess} onClick={handleGuess}>
           <WandSparkles size={20} />
           <span className="hidden sm:inline">Adivinhar</span>
         </Button>

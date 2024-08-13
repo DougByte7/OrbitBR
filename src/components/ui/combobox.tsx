@@ -9,6 +9,7 @@ import {
 import { Search } from "lucide-react";
 import { Input } from "./input";
 import { Button } from "./button";
+import { removeDiacritics } from "@/lib/removeDiacritics";
 
 interface LabelValue {
   label: string;
@@ -16,46 +17,64 @@ interface LabelValue {
 }
 
 interface ComboboxProps {
-  placeholder?: string;
   options: LabelValue[] | string[];
-  onChange?: (selected?: ComboboxProps["options"][number]) => void;
+  placeholder?: string;
+  value?: string;
+  onChange?: (selected: string) => void;
 }
-export function Combobox({ placeholder, options, onChange }: ComboboxProps) {
-  const [query, setQuery] = useState<string | null>("");
+export function Combobox({
+  placeholder,
+  value,
+  options,
+  onChange,
+}: ComboboxProps) {
+  const [state, setState] = useState<string | null>("");
+  const query = value ?? state;
 
   const filteredOptions = (
     !query
       ? []
       : options.filter((option) => {
           return typeof option === "string"
-            ? option.toLowerCase().includes(query?.toLowerCase() ?? "")
-            : option.label.toLowerCase().includes(query?.toLowerCase() ?? "");
+            ? removeDiacritics(option)
+                .toLowerCase()
+                .includes(removeDiacritics(query ?? "").toLowerCase() ?? "")
+            : removeDiacritics(option.label)
+                .toLowerCase()
+                .includes(removeDiacritics(query ?? "").toLowerCase() ?? "");
         })
   ).slice(0, 5);
 
-  const handleChange = (value: string | null) => {
-    setQuery(value);
-    onChange?.(
-      options.find(
-        (option) =>
-          (typeof option === "string" ? option : option.label) === value,
-      ),
+  const handleSelect = (newValue: string | null) => {
+    if (!value === undefined) setState(newValue);
+    const option = options.find(
+      (option) =>
+        removeDiacritics(
+          typeof option === "string" ? option : option.label,
+        ).toLowerCase() === removeDiacritics(newValue ?? "").toLowerCase(),
     );
+
+    onChange?.(typeof option === "string" ? option : (option?.value ?? ""));
+  };
+
+  const handleChange = (newValue: string) => {
+    if (!value === undefined) setState(newValue);
+    onChange?.(newValue);
   };
 
   return (
-    <HeadlessCombobox value={query} onChange={handleChange}>
+    <HeadlessCombobox value={query} onChange={handleSelect}>
       <ComboboxInput
         as={Input}
         inputClassName="capitalize"
         leftSection={<Search size={20} />}
         placeholder={placeholder}
         value={query ?? ""}
-        onChange={(event) => setQuery(event.target.value)}
+        onChange={(event) => handleChange(event.target.value)}
       />
 
       <ComboboxOptions anchor="bottom" className="py-2">
-        <div className="bg-input-background grid rounded-[2px] border border-border/10 p-1 empty:invisible">
+        <div className="grid rounded-[2px] border border-border/10 bg-input-background p-1 empty:invisible">
           {filteredOptions.map((option) => (
             <ComboboxOption
               key={typeof option === "string" ? option : option.value}
