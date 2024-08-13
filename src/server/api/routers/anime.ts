@@ -28,7 +28,6 @@ export const animeRouter = createTRPCRouter({
           synopsis,
           authors,
           genres,
-          streamingAt,
           streamingUrl,
         },
       }) => {
@@ -44,8 +43,8 @@ export const animeRouter = createTRPCRouter({
             synopsis: synopsis.trim(),
             authors,
             genres,
-            streamingAt: streamingAt.trim(),
-            streamingUrl: streamingUrl.trim(),
+            streamingAt: getStreamingNames(streamingUrl),
+            streamingUrl,
           },
         });
       },
@@ -63,7 +62,6 @@ export const animeRouter = createTRPCRouter({
           synopsis,
           authors,
           genres,
-          streamingAt,
           streamingUrl,
         },
       }) => {
@@ -87,8 +85,8 @@ export const animeRouter = createTRPCRouter({
             synopsis: synopsis.trim(),
             authors,
             genres,
-            streamingAt: streamingAt.trim(),
-            streamingUrl: streamingUrl.trim(),
+            streamingUrl,
+            streamingAt: getStreamingNames(streamingUrl),
           },
         });
       },
@@ -107,7 +105,7 @@ export const animeRouter = createTRPCRouter({
           title: z.string().optional(),
           authors: z.string().array().optional(),
           genres: z.string().array().optional(),
-          streamingAt: z.string().optional(),
+          streamingAt: z.string().array().optional(),
         })
         .optional(),
     )
@@ -119,28 +117,22 @@ export const animeRouter = createTRPCRouter({
           title: title ? { contains: title } : undefined,
           authors: authors ? { hasSome: authors } : undefined,
           genres: genres ? { hasEvery: genres } : undefined,
-          streamingAt: streamingAt ? { contains: streamingAt } : undefined,
+          streamingAt: streamingAt ? { hasSome: streamingAt } : undefined,
         },
+        orderBy: { status: "desc" },
       });
     }),
   getAllNames: publicProcedure.query(async ({ ctx }) => {
     const animes = await ctx.db.anime.findMany();
     return animes.map((anime) => anime.title);
   }),
-  getAnimeOfTheDay: publicProcedure
-    .input(z.number().min(0).max(366))
-    .query(async ({ ctx, input }) => {
-      const seed = input / 366;
+  getAnimeOfTheDay: publicProcedure.query(async ({ ctx, input }) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    const result = await ctx.db.todayGameResults.findFirstOrThrow();
 
-      await ctx.db.$executeRaw`SELECT setseed(${seed})`;
-      const animeOfTheDay = await ctx.db.$queryRaw<[Anime]>`
-       SELECT * 
-       FROM "Anime"
-       ORDER BY random() 
-       LIMIT 1`;
-
-      return animeOfTheDay[0];
-    }),
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+    return ctx.db.anime.findFirst({ where: { id: result.animeId } });
+  }),
 });
 
 async function uploadAnimeCover(cover: string, id: string) {
@@ -156,4 +148,10 @@ async function uploadAnimeCover(cover: string, id: string) {
   if (!utRes.data) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
   return utRes.data.key;
+}
+
+function getStreamingNames(urls: string[]): string[] {
+  return urls.map(
+    (url) => url.match(/www.(?<streaming>.*).com/)!.groups!.streaming!,
+  );
 }
