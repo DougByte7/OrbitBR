@@ -30,7 +30,7 @@ export default function RootLayout({
       <body
         className={cn(
           "h-screen overflow-hidden bg-background bg-origin-padding font-sans antialiased",
-          "before:absolute before:left-1/2 before:top-1/2 before:-z-10 before:h-[200%] before:w-[200%] before:-translate-x-1/2 before:-translate-y-1/2 before:rotate-12 before:bg-[url('/background.png')] before:bg-cover before:bg-repeat before:opacity-[0.02]",
+          "before:absolute before:left-1/2 before:top-1/2 before:-z-10 before:h-full before:w-full before:-translate-x-1/2 before:-translate-y-1/2 before:bg-[url('/background.png')] before:bg-cover before:bg-repeat before:opacity-[0.02]",
           fontSans.variable,
         )}
       >
