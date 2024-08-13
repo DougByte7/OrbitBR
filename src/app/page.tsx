@@ -2,6 +2,7 @@ import { api } from "@/trpc/server";
 import TopBar from "@/components/top-bar";
 import Game from "./_components/game";
 import { addDays } from "date-fns";
+import { status } from "@/constants/animes";
 
 export const revalidate = 60;
 
@@ -18,6 +19,9 @@ export default async function Home() {
   const dayOfTheYear = Math.floor(diff / oneDay);
   const todayAnime = await api.anime.getAnimeOfTheDay(dayOfTheYear);
   const animeList = await api.anime.getAll();
+  todayAnime.status =
+    status.find((s) => s.value === todayAnime.status)?.label ??
+    todayAnime.status;
 
   return (
     <main className="flex flex-col items-center justify-center gap-10 px-4">
