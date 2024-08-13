@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: "Orbit",
   description:
     "A Orbit começa como um minigame envolvente, onde você tenta adivinhar o anime do dia. Nosso objetivo é evoluir continuamente o projeto, adicionando novos modos de jogo, sistemas de avaliação, perfis personalizados e muito mais. Fique ligado para não perder nenhuma novidade!",
-  icons: [{ rel: "icon", url: "/favicon.png" }],
+  icons: [{ rel: "icon", url: "/favicon.webp" }],
 };
 
 export default function RootLayout({
