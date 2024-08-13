@@ -18,48 +18,22 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
     Array<GuessedAnime & { id: string }>
   >([]);
   const [currentGuess, setCurrentGuess] = useState<GuessedAnime | undefined>();
-  const { showResult, loseLife } = useGameActions();
+  const { gameWin, loseLife } = useGameActions();
   const lifes = useGameLifes();
 
   const handleGuess = () => {
     if (!currentGuess) return;
 
-    const userDataKey = "user:data";
-    const userData = JSON.parse(
-      localStorage.getItem(userDataKey) ??
-        '{"played":0,"victories":0,"sequence":0,"lastPlayed":0}',
-    ) as {
-      played: number;
-      victories: number;
-      sequence: number;
-      lastPlayed: number;
-    };
-
-    userData.played += 1;
-    userData.lastPlayed = new Date().getTime();
-
-    if (userData.lastPlayed === 0) {
-      localStorage.removeItem(userDataKey);
-    }
-
     if (todayAnime.title === currentGuess.title) {
-      userData.victories += 1;
-      userData.sequence += 1;
-
-      localStorage.setItem(userDataKey, JSON.stringify(userData));
-      showResult();
+      gameWin();
       return;
     }
 
-    if (!(lifes - 1)) {
-      localStorage.setItem(userDataKey, JSON.stringify(userData));
-      showResult();
-      return;
-    }
-
+    console.log({loseLife});
+    
     loseLife();
     setWrongGuess((prev) => {
-      return [{ ...currentGuess, id: nanoid(10) }, ...prev];
+      return [{ ...currentGuess, id: nanoid(5) }, ...prev];
     });
   };
 

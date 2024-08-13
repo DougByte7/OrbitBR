@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { addDays } from "date-fns";
 
+export const revalidate = 0;
+
 export default function Countdown() {
   const computeCountdown = () => {
     const now = new Date();

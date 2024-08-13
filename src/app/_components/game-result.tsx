@@ -5,36 +5,32 @@ import {
   IconBrandTwitterFilled,
   IconBrandFacebook,
 } from "@tabler/icons-react";
+import {
+  useGameTimesPlayed,
+  useGameTotalVictories,
+  useGameVictoryStreak,
+} from "../state";
 
 export default function GameResult() {
-  const userData = JSON.parse(
-    localStorage.getItem("user:data") ??
-      '{"played":1,"victories":0,"sequence":0,"lastPlayed":0}',
-  ) as {
-    played: number;
-    victories: number;
-    sequence: number;
-    lastPlayed: number;
-  };
+  const timesPlayed = useGameTimesPlayed();
+  const totalVictories = useGameTotalVictories();
+  const victoryStreak = useGameVictoryStreak();
 
   return (
     <>
       <div className="my-12 flex w-full gap-3">
         <div className="w-1/3 rounded-sm border border-border/10 bg-white/5 p-3 text-center">
-          <div className="mb-3 text-2xl font-bold">{userData.played}</div>
+          <div className="mb-3 text-2xl font-bold">{timesPlayed}</div>
           <div className="text-sm text-muted">Jogos</div>
         </div>
         <div className="w-1/3 rounded-sm border border-border/10 bg-white/5 p-3 text-center">
           <div className="mb-3 text-2xl font-bold">
-            {parseFloat(
-              ((userData.victories / userData.played) * 100).toFixed(2),
-            )}
-            %
+            {parseFloat(((totalVictories / timesPlayed) * 100).toFixed(2))}%
           </div>
           <div className="text-sm text-muted">De vitórias</div>
         </div>
         <div className="w-1/3 rounded-sm border border-border/10 bg-white/5 p-3 text-center">
-          <div className="mb-3 text-2xl font-bold">🔥{userData.sequence}</div>
+          <div className="mb-3 text-2xl font-bold">🔥{victoryStreak}</div>
           <div className="text-sm text-muted">Sequência de vitórias</div>
         </div>
       </div>
