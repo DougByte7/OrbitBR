@@ -53,15 +53,17 @@ export default function AnimeInfo({ anime }: AnimeInfoProps) {
 
         <div className="mt-4 grid items-start gap-3">
           <div className="text-xs">Disponível em:</div>
-          <a className="w-fit" href={anime.streamingUrl} target="_blank">
-            <Image
-              className="rounded-[2px]"
-              src={`/images/logo_${anime.streamingAt.toLowerCase()}.png`}
-              alt={`Logo ${anime.streamingAt}`}
-              width={138}
-              height={27}
-            />
-          </a>
+          <div className="flex max-w-[300px] flex-wrap items-center gap-3 sm:max-w-[438px]">
+            {anime.streamingUrl.map((url) => (
+              <a key={url} className="w-fit" href={url} target="_blank">
+                <img
+                  className="h-[27px rounded-[2px]"
+                  src={`/images/${url.match(/www.(?<streaming>.*).com/)!.groups!.streaming!}.png`}
+                  alt={`Logo ${anime.streamingAt}`}
+                />
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -86,7 +88,10 @@ function Synopsis({ text, hiddenText }: SynopsisProps) {
             </CollapsibleContent>
             <CollapsibleTrigger asChild>
               {open ? (
-                <span className="font-medium text-success">{" "}Ver&nbsp;menos</span>
+                <span className="font-medium text-success">
+                  {" "}
+                  Ver&nbsp;menos
+                </span>
               ) : (
                 <span>
                   ...{" "}

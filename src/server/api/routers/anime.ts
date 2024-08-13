@@ -126,7 +126,7 @@ export const animeRouter = createTRPCRouter({
     const animes = await ctx.db.anime.findMany();
     return animes.map((anime) => anime.title);
   }),
-  getAnimeOfTheDay: publicProcedure.query(async ({ ctx, input }) => {
+  getAnimeOfTheDay: publicProcedure.query(async ({ ctx }) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     const result = await ctx.db.todayGameResults.findFirstOrThrow();
 
