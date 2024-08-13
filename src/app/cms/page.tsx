@@ -15,7 +15,7 @@ import TopBar from "@/components/top-bar";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { api } from "@/trpc/server";
-import { genres, status, streamings } from "../constants/animes";
+import { genres, status, streamings } from "@/constants/animes";
 import { FilterIcon } from "lucide-react";
 
 export default async function CMS({

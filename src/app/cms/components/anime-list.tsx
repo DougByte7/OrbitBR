@@ -17,7 +17,7 @@ import type { Anime } from "@prisma/client";
 import AnimeForm from "./anime-form";
 import { api } from "@/trpc/react";
 import { useSearchParams } from "next/navigation";
-import { status } from "@/app/constants/animes";
+import { status } from "@/constants/animes";
 
 export default function AnimeList() {
   const params = useSearchParams();

@@ -20,7 +20,7 @@ import type { z } from "zod";
 import type { Anime } from "@prisma/client";
 import { modals } from "@mantine/modals";
 import { api } from "@/trpc/react";
-import { genres, streamings } from "@/app/constants/animes";
+import { genres, streamings } from "@/constants/animes";
 
 type AnimeEditModalProps =
   | {
