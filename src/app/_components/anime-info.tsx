@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @next/next/no-img-element */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 "use client";
 import React from "react";
 import Image from "next/image";
