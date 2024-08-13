@@ -1,8 +1,6 @@
 "use client";
 import React from "react";
 import {
-  Autocomplete,
-  Fieldset,
   FileInput,
   Group,
   Loader,
@@ -20,7 +18,7 @@ import type { z } from "zod";
 import type { Anime } from "@prisma/client";
 import { modals } from "@mantine/modals";
 import { api } from "@/trpc/react";
-import { genres, streamings } from "@/constants/animes";
+import { genres } from "@/constants/animes";
 
 type AnimeEditModalProps =
   | {
@@ -42,8 +40,10 @@ export default function AnimeForm({
       title: anime?.title ?? "",
       status: anime?.status ?? "",
       synopsis: anime?.synopsis ?? "",
-      streamingAt: anime?.streamingAt ?? "",
-      streamingUrl: anime?.streamingUrl ?? "",
+      streamingUrl: (anime?.streamingUrl ?? []) as unknown as [
+        string,
+        ...string[],
+      ],
       genres: (anime?.genres ?? []) as unknown as [string, ...string[]],
       authors: (anime?.authors ?? []) as unknown as [string, ...string[]],
     },
@@ -108,33 +108,28 @@ export default function AnimeForm({
       </Radio.Group>
 
       <TagsInput label="Autores" {...form.getInputProps("authors")} />
-      <TagsInput
-        className="col-span-2"
-        label="Gêneros"
-        data={genres}
-        {...form.getInputProps("genres")}
-      />
       <Textarea
         className="col-span-2"
         autosize
         label="Sinopse"
         {...form.getInputProps("synopsis")}
       />
+      <TagsInput
+        className="col-span-2"
+        label="Gêneros"
+        data={genres}
+        {...form.getInputProps("genres")}
+      />
 
-      <Fieldset legend="Streaming">
-        <Autocomplete
-          label="Nome"
-          data={streamings}
-          {...form.getInputProps("streamingAt")}
-        />
-        <TextInput
-          label="Url"
-          type="url"
-          {...form.getInputProps("streamingUrl")}
-        />
-      </Fieldset>
+      <TagsInput
+        className="col-span-2"
+        label="Streaming Urls"
+        type="url"
+        {...form.getInputProps("streamingUrl")}
+      />
 
       <FileInput
+        className="col-span-2"
         label="Capa"
         placeholder="Selecione um arquivo"
         accept={ACCEPTED_IMAGE_TYPES.join()}

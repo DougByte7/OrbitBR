@@ -12,7 +12,7 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { Trash2Icon } from "lucide-react";
+import { RiDeleteBinLine } from "@remixicon/react";
 import type { Anime } from "@prisma/client";
 import AnimeForm from "./anime-form";
 import { api } from "@/trpc/react";
@@ -32,7 +32,7 @@ export default function AnimeList() {
       : undefined,
     genres: params.get("genres") ? params.get("genres")?.split(",") : undefined,
     streamingAt: params.get("streamingAt")
-      ? params.get("streamingAt")!
+      ? params.get("streamingAt")?.split(",")
       : undefined,
   });
 
@@ -164,7 +164,7 @@ function CardAnime({ anime }: WithAnimeProp) {
           color="red"
           onClick={handleDelete(anime.title)}
         >
-          <Trash2Icon size={18} />
+          <RiDeleteBinLine size={18} />
         </ActionIcon>
         <Image
           src={`https://utfs.io/f/${anime.cover}`}
