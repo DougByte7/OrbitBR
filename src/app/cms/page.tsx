@@ -15,7 +15,7 @@ import TopBar from "@/components/top-bar";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { api } from "@/trpc/server";
-import { genres, streamings } from "../constants/animes";
+import { genres, status, streamings } from "../constants/animes";
 import { FilterIcon } from "lucide-react";
 
 export default async function CMS({
@@ -98,11 +98,7 @@ async function AnimeFilters({ params }: AnimeFilterProps) {
         name="status"
         defaultValue={params?.status}
         placeholder="Status"
-        data={[
-          { label: "Concluído", value: "complete" },
-          { label: "Em andamento", value: "ongoing" },
-          { label: "Não estreado", value: "unreleased" },
-        ]}
+        data={status}
       />
       <Autocomplete
         name="streamingAt"

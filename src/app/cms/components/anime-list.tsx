@@ -6,6 +6,7 @@ import {
   ActionIcon,
   Card,
   Group,
+  Indicator,
   Loader,
   Text,
   UnstyledButton,
@@ -16,6 +17,7 @@ import type { Anime } from "@prisma/client";
 import AnimeForm from "./anime-form";
 import { api } from "@/trpc/react";
 import { useSearchParams } from "next/navigation";
+import { status } from "@/app/constants/animes";
 
 export default function AnimeList() {
   const params = useSearchParams();
@@ -138,36 +140,50 @@ function CardAnime({ anime }: WithAnimeProp) {
     });
 
   return (
-    <Card
-      className="relative h-full !border-border/10 !bg-background !p-0"
-      shadow="sm"
-      radius="md"
-      withBorder
+    <Indicator
+      className="[&_.mantine-Indicator-indicator]:-translate-x-1/2 [&_.mantine-Indicator-indicator]:-rotate-90"
+      label={status.find((s) => s.value === anime.status)?.label}
+      position="middle-start"
+      size={16}
+      color={
+        anime.status === "complete"
+          ? "green"
+          : anime.status === "ongoing"
+            ? "yellow"
+            : "red"
+      }
     >
-      <ActionIcon
-        className="!absolute right-2 top-2"
-        color="red"
-        onClick={handleDelete(anime.title)}
+      <Card
+        className="relative h-full !border-border/10 !bg-background !p-0"
+        shadow="sm"
+        radius="md"
+        withBorder
       >
-        <Trash2Icon size={18} />
-      </ActionIcon>
-      <Image
-        src={`https://utfs.io/f/${anime.cover}`}
-        className="rounded-[2px]"
-        alt="Capa do anime"
-        width={231}
-        height={343}
-      />
-      <UnstyledButton
-        className="absolute bottom-0 left-1/2 w-full -translate-x-1/2"
-        onClick={handleEdit(anime)}
-      >
-        <div className="flex items-center justify-center border-t-2 border-success bg-primary p-1">
-          <Text className="text-center !text-white" fw={700}>
-            {anime.title}
-          </Text>
-        </div>
-      </UnstyledButton>
-    </Card>
+        <ActionIcon
+          className="!absolute right-2 top-2"
+          color="red"
+          onClick={handleDelete(anime.title)}
+        >
+          <Trash2Icon size={18} />
+        </ActionIcon>
+        <Image
+          src={`https://utfs.io/f/${anime.cover}`}
+          className="rounded-[2px]"
+          alt="Capa do anime"
+          width={231}
+          height={343}
+        />
+        <UnstyledButton
+          className="absolute bottom-0 left-1/2 w-full -translate-x-1/2"
+          onClick={handleEdit(anime)}
+        >
+          <div className="flex items-center justify-center border-t-2 border-success bg-primary p-1">
+            <Text className="text-center !text-white" fw={700}>
+              {anime.title}
+            </Text>
+          </div>
+        </UnstyledButton>
+      </Card>
+    </Indicator>
   );
 }

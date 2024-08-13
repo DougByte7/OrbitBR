@@ -1,4 +1,4 @@
-export const streamings = ["Crunchyroll", "Netflix", "Prime Video"];
+export const streamings = ["Crunchyroll", "Netflix", "Prime Video", "Disney+"];
 
 export const genres = [
   "Aventura",
@@ -12,11 +12,17 @@ export const genres = [
   "Fantasia",
   "Ficção Científica",
   "Girls Love",
-  "Gourmet",
+  "Culinária",
   "Horror",
   "Mistério",
   "Romance",
   "Sobrenatural",
   "Suspense",
   "Vida Cotidiana",
+];
+
+export const status = [
+  { label: "Concluído", value: "complete" },
+  { label: "Em andamento", value: "ongoing" },
+  { label: "Não estreado", value: "unreleased" },
 ];
