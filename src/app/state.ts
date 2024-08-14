@@ -66,8 +66,10 @@ const useGameStore = create<State & Actions>()(
           set((state) => {
             const now = new Date();
             const lastPlayed = new Date(state.lastPlayed);
+            const playedToday =
+              now.toDateString() === lastPlayed.toDateString();
             const playedBeforeMidDay =
-              lastPlayed.getHours() < 12 && now.getHours() >= 12;
+              playedToday && lastPlayed.getHours() < 12 && now.getHours() >= 12;
             const playedOneOrMoreDaysAgo =
               lastPlayed.toDateString() !== now.toDateString();
 
