@@ -3,8 +3,7 @@ import { gameStorage } from "@/constants/localStorage";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { persist } from "zustand/middleware";
-import { differenceInDays, isYesterday } from "date-fns";
-import { revalidatePath } from "next/cache";
+import { addDays, isWithinInterval, subDays, subMilliseconds } from "date-fns";
 
 type State = {
   view: "game" | "result";
@@ -41,17 +40,25 @@ const useGameStore = create<State & Actions>()(
             const now = new Date();
             const lastPlayed = new Date(state.lastPlayed);
 
-            const playedToday =
-              now.toDateString() === lastPlayed.toDateString();
+            const prevGameTimeStart = subDays(
+              now.getHours() >= 12
+                ? now.setHours(12, 0, 0, 0)
+                : subDays(now, 1).setHours(12, 0, 0, 0),
+              1,
+            );
+            const prevGameTimeEnd = subMilliseconds(
+              addDays(prevGameTimeStart, 1),
+              1,
+            );
 
-            const playedYesterdayAfterMidDay =
-              isYesterday(lastPlayed) && lastPlayed.getHours() >= 12;
-
-            const playedLastGame = playedYesterdayAfterMidDay || playedToday;
+            const playedLastGame = isWithinInterval(lastPlayed, {
+              start: prevGameTimeStart,
+              end: prevGameTimeEnd,
+            });
 
             state.victoryStreak = playedLastGame ? state.victoryStreak + 1 : 1;
             // Keep last
-            state.lastPlayed = now.getTime();
+            state.lastPlayed = new Date().getTime();
           });
         },
         loseLife() {
@@ -67,29 +74,27 @@ const useGameStore = create<State & Actions>()(
         },
         resetView() {
           set((state) => {
+            if (state.view === "game") return;
+
             const now = new Date();
             const lastPlayed = new Date(state.lastPlayed);
 
-            const playedYesterdayBeforeMidDay =
-              isYesterday(lastPlayed) && lastPlayed.getHours() < 12;
-            const playedYesterdayAfterMidDay =
-              isYesterday(lastPlayed) && lastPlayed.getHours() >= 12;
-            const playedTwoOrMoreDaysAgo =
-              differenceInDays(now, lastPlayed) >= 2;
-            const playedTodayBeforeMidDay =
-              now.toDateString() === lastPlayed.toDateString() &&
-              lastPlayed.getHours() < 12;
+            const gameTimeStart =
+              now.getHours() >= 12
+                ? now.setHours(12, 0, 0, 0)
+                : subDays(now, 1).setHours(12, 0, 0, 0);
+            const gameTimeEnd = subMilliseconds(addDays(gameTimeStart, 1), 1);
 
-            const canPlayToday =
-              playedTodayBeforeMidDay ||
-              playedYesterdayBeforeMidDay ||
-              (playedYesterdayAfterMidDay && now.getHours() >= 12) ||
-              playedTwoOrMoreDaysAgo;
+            if (
+              isWithinInterval(lastPlayed, {
+                start: gameTimeStart,
+                end: gameTimeEnd,
+              })
+            )
+              return;
 
-            if (canPlayToday && state.view === "result") {
-              state.lifes = 5;
-              state.view = "game";
-            }
+            state.lifes = 5;
+            state.view = "game";
           });
         },
       },
