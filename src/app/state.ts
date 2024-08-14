@@ -76,12 +76,6 @@ const useGameStore = create<State & Actions>()(
             const playedTwoOrMoreDaysAgo =
               differenceInDays(now, lastPlayed) >= 2;
 
-            console.log(
-              playedYesterdayBeforeMidDay,
-              playedYesterdayAfterMidDay && now.getHours() >= 12,
-              playedTwoOrMoreDaysAgo,
-            );
-
             const canPlayToday =
               playedYesterdayBeforeMidDay ||
               (playedYesterdayAfterMidDay && now.getHours() >= 12) ||

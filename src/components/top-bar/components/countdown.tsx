@@ -27,9 +27,9 @@ export default function Countdown() {
   const { resetView } = useGameActions();
 
   useEffect(() => {
+    resetView();
     const timeout = setTimeout(() => {
       setCountdown(computeCountdown());
-      resetView();
     }, 1000);
 
     return () => {
