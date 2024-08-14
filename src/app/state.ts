@@ -3,7 +3,7 @@ import { gameStorage } from "@/constants/localStorage";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { persist } from "zustand/middleware";
-import { isYesterday } from "date-fns";
+import { differenceInDays, isYesterday } from "date-fns";
 
 type State = {
   view: "game" | "result";
@@ -39,15 +39,17 @@ const useGameStore = create<State & Actions>()(
             state.totalVictories += 1;
             const now = new Date();
             const lastPlayed = new Date(state.lastPlayed);
+            
             const playedToday =
-              now.toDateString() === lastPlayed.toDateString();
-            const playedBeforeMidDay =
-              playedToday && lastPlayed.getHours() < 12 && now.getHours() >= 12;
-            state.victoryStreak =
-              (lastPlayed.getHours() >= 12 && isYesterday(lastPlayed)) ||
-              playedBeforeMidDay
-                ? state.victoryStreak + 1
-                : 1;
+              now.toDateString() === lastPlayed.toDateString();           
+
+            const playedYesterdayAfterMidDay =
+              isYesterday(lastPlayed) && lastPlayed.getHours() >= 12;
+            
+              const playedLastGame =
+              playedYesterdayAfterMidDay || playedToday;
+
+            state.victoryStreak = playedLastGame ? state.victoryStreak + 1 : 1;
             // Keep last
             state.lastPlayed = now.getTime();
           });
@@ -68,17 +70,18 @@ const useGameStore = create<State & Actions>()(
             state.view = "result";
             const now = new Date();
             const lastPlayed = new Date(state.lastPlayed);
-            const playedToday =
-              now.toDateString() === lastPlayed.toDateString();
 
-            const playedBeforeMidDay =
-              playedToday && lastPlayed.getHours() < 12 && now.getHours() >= 12;
+            const playedYesterdayBeforeMidDay =
+              isYesterday(lastPlayed) && lastPlayed.getHours() < 12;
+            const playedYesterdayAfterMidDay =
+              isYesterday(lastPlayed) && lastPlayed.getHours() >= 12;
+            const playedTwoOrMoreDaysAgo =
+              differenceInDays(now, lastPlayed) >= 2;
 
-            const playedOneOrMoreDaysAgo =
-              now.getHours() >= 12 &&
-              lastPlayed.toDateString() !== now.toDateString();
-
-            const canPlayToday = playedBeforeMidDay || playedOneOrMoreDaysAgo;
+            const canPlayToday =
+              playedYesterdayBeforeMidDay ||
+              (playedYesterdayAfterMidDay && now.getHours() >= 12) ||
+              playedTwoOrMoreDaysAgo;
 
             if (!canPlayToday) return;
             state.lifes = 5;
