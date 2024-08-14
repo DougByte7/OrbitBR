@@ -76,14 +76,18 @@ const useGameStore = create<State & Actions>()(
               isYesterday(lastPlayed) && lastPlayed.getHours() >= 12;
             const playedTwoOrMoreDaysAgo =
               differenceInDays(now, lastPlayed) >= 2;
+            const playedTodayBeforeMidDay =
+              now.toDateString() === lastPlayed.toDateString() &&
+              lastPlayed.getHours() < 12;
 
             const canPlayToday =
+              playedTodayBeforeMidDay ||
               playedYesterdayBeforeMidDay ||
               (playedYesterdayAfterMidDay && now.getHours() >= 12) ||
               playedTwoOrMoreDaysAgo;
 
             if (canPlayToday && state.view === "result") {
-              revalidatePath("/");
+              revalidatePath("");
               state.lifes = 5;
               state.view = "game";
             }
