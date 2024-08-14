@@ -39,15 +39,14 @@ const useGameStore = create<State & Actions>()(
             state.totalVictories += 1;
             const now = new Date();
             const lastPlayed = new Date(state.lastPlayed);
-            
+
             const playedToday =
-              now.toDateString() === lastPlayed.toDateString();           
+              now.toDateString() === lastPlayed.toDateString();
 
             const playedYesterdayAfterMidDay =
               isYesterday(lastPlayed) && lastPlayed.getHours() >= 12;
-            
-              const playedLastGame =
-              playedYesterdayAfterMidDay || playedToday;
+
+            const playedLastGame = playedYesterdayAfterMidDay || playedToday;
 
             state.victoryStreak = playedLastGame ? state.victoryStreak + 1 : 1;
             // Keep last
@@ -67,7 +66,6 @@ const useGameStore = create<State & Actions>()(
         },
         resetView() {
           set((state) => {
-            state.view = "result";
             const now = new Date();
             const lastPlayed = new Date(state.lastPlayed);
 
@@ -78,14 +76,21 @@ const useGameStore = create<State & Actions>()(
             const playedTwoOrMoreDaysAgo =
               differenceInDays(now, lastPlayed) >= 2;
 
+            console.log(
+              playedYesterdayBeforeMidDay,
+              playedYesterdayAfterMidDay && now.getHours() >= 12,
+              playedTwoOrMoreDaysAgo,
+            );
+
             const canPlayToday =
               playedYesterdayBeforeMidDay ||
               (playedYesterdayAfterMidDay && now.getHours() >= 12) ||
               playedTwoOrMoreDaysAgo;
 
-            if (!canPlayToday) return;
-            state.lifes = 5;
-            state.view = "game";
+            if (canPlayToday && state.view === "result") {
+              state.lifes = 5;
+              state.view = "game";
+            }
           });
         },
       },
