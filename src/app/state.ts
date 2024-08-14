@@ -44,7 +44,8 @@ const useGameStore = create<State & Actions>()(
             const playedBeforeMidDay =
               playedToday && lastPlayed.getHours() < 12 && now.getHours() >= 12;
             state.victoryStreak =
-              isYesterday(state.lastPlayed) || playedBeforeMidDay
+              (lastPlayed.getHours() >= 12 && isYesterday(lastPlayed)) ||
+              playedBeforeMidDay
                 ? state.victoryStreak + 1
                 : 1;
             // Keep last
@@ -64,16 +65,21 @@ const useGameStore = create<State & Actions>()(
         },
         resetView() {
           set((state) => {
+            state.view = "result";
             const now = new Date();
             const lastPlayed = new Date(state.lastPlayed);
             const playedToday =
               now.toDateString() === lastPlayed.toDateString();
+
             const playedBeforeMidDay =
               playedToday && lastPlayed.getHours() < 12 && now.getHours() >= 12;
+
             const playedOneOrMoreDaysAgo =
+              now.getHours() >= 12 &&
               lastPlayed.toDateString() !== now.toDateString();
 
             const canPlayToday = playedBeforeMidDay || playedOneOrMoreDaysAgo;
+
             if (!canPlayToday) return;
             state.lifes = 5;
             state.view = "game";
