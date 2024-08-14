@@ -3,7 +3,7 @@ import { gameStorage } from "@/constants/localStorage";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { persist } from "zustand/middleware";
-import { isYesterday, subHours } from "date-fns";
+import { isYesterday } from "date-fns";
 
 type State = {
   view: "game" | "result";
@@ -37,12 +37,18 @@ const useGameStore = create<State & Actions>()(
             state.view = "result";
             state.timesPlayed += 1;
             state.totalVictories += 1;
-
-            state.victoryStreak = isYesterday(state.lastPlayed)
-              ? state.victoryStreak + 1
-              : 1;
+            const now = new Date();
+            const lastPlayed = new Date(state.lastPlayed);
+            const playedToday =
+              now.toDateString() === lastPlayed.toDateString();
+            const playedBeforeMidDay =
+              playedToday && lastPlayed.getHours() < 12 && now.getHours() >= 12;
+            state.victoryStreak =
+              isYesterday(state.lastPlayed) || playedBeforeMidDay
+                ? state.victoryStreak + 1
+                : 1;
             // Keep last
-            state.lastPlayed = subHours(new Date(), 12).getTime();
+            state.lastPlayed = now.getTime();
           });
         },
         loseLife() {
@@ -53,12 +59,20 @@ const useGameStore = create<State & Actions>()(
             state.view = "result";
             state.timesPlayed += 1;
             state.victoryStreak = 0;
-            state.lastPlayed = subHours(new Date(), 12).getTime();
+            state.lastPlayed = new Date().getTime();
           });
         },
         resetView() {
           set((state) => {
-            if (!isYesterday(state.lastPlayed)) return;
+            const now = new Date();
+            const lastPlayed = new Date(state.lastPlayed);
+            const playedBeforeMidDay =
+              lastPlayed.getHours() < 12 && now.getHours() >= 12;
+            const playedOneOrMoreDaysAgo =
+              lastPlayed.toDateString() !== now.toDateString();
+
+            const canPlayToday = playedBeforeMidDay || playedOneOrMoreDaysAgo;
+            if (!canPlayToday) return;
             state.lifes = 5;
             state.view = "game";
           });
