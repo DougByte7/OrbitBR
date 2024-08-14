@@ -36,7 +36,7 @@ export default async function CMS({
         </SignedOut>
       </TopBar>
 
-      {user?.privateMetadata.admin ? (
+      {user?.privateMetadata.admin === true ? (
         <div className="grid gap-4 py-6">
           <AnimeFilters params={searchParams} />
           <AnimeList />
