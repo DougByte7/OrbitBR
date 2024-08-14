@@ -150,7 +150,9 @@ function CardAnime({ anime }: WithAnimeProp) {
           ? "green"
           : anime.status === "ongoing"
             ? "yellow"
-            : "red"
+            : anime.status === "canceled"
+              ? "red"
+              : "blue"
       }
     >
       <Card

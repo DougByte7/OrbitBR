@@ -18,7 +18,7 @@ import type { z } from "zod";
 import type { Anime } from "@prisma/client";
 import { modals } from "@mantine/modals";
 import { api } from "@/trpc/react";
-import { genres } from "@/constants/animes";
+import { genres, status } from "@/constants/animes";
 
 type AnimeEditModalProps =
   | {
@@ -87,7 +87,7 @@ export default function AnimeForm({
 
   return (
     <form
-      className="grid grid-cols-2 items-center gap-4"
+      className="grid grid-cols-[1fr_auto] items-center gap-4"
       onSubmit={form.onSubmit(handleSave)}
     >
       <TextInput
@@ -97,17 +97,13 @@ export default function AnimeForm({
       />
       <Radio.Group label="Status" {...form.getInputProps("status")}>
         <Group align="center">
-          {[
-            { label: "Concluído", value: "complete" },
-            { label: "Em andamento", value: "ongoing" },
-            { label: "Não estreado", value: "unreleased" },
-          ].map((op) => (
+          {status.map((op) => (
             <Radio key={op.value} label={op.label} value={op.value} />
           ))}
         </Group>
       </Radio.Group>
 
-      <TagsInput label="Autores" {...form.getInputProps("authors")} />
+      <TagsInput className="w-72" label="Autores" {...form.getInputProps("authors")} />
       <Textarea
         className="col-span-2"
         autosize

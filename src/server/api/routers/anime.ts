@@ -9,7 +9,7 @@ import { utapi } from "@/server/uploadthing";
 import { TRPCError } from "@trpc/server";
 import { resizeImage } from "@/lib/resizeImage";
 import { z } from "zod";
-import type { Anime } from "@prisma/client";
+import { status } from "@/constants/animes";
 
 const idSize = 10;
 const backendAnimeSchema = animeSchema.extend({
@@ -101,7 +101,9 @@ export const animeRouter = createTRPCRouter({
     .input(
       z
         .object({
-          status: z.enum(["unreleased", "ongoing", "complete"]).optional(),
+          status: z
+            .enum(status.map((s) => s.value) as [string, ...string[]])
+            .optional(),
           title: z.string().optional(),
           authors: z.string().array().optional(),
           genres: z.string().array().optional(),
