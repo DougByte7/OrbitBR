@@ -62,7 +62,7 @@ function List({ animes }: ListProps) {
 
   return (
     <>
-      <div ref={parentRef} className="h-[calc(100vh-70px)] overflow-auto">
+      <div ref={parentRef} className="h-[calc(100vh-146px)] overflow-auto">
         <div
           className="relative w-full"
           style={{

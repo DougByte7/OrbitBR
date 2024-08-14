@@ -13,7 +13,7 @@ export default async function Home() {
     todayAnime!.status;
 
   return (
-    <main className="flex flex-col items-center justify-center gap-10 px-4">
+    <main className="flex flex-col items-center justify-center gap-10 px-4 pb-32">
       <TopBar />
 
       <Game

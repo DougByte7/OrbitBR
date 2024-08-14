@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 
-import { Inter as FontSans } from "next/font/google";
+import { Inter } from "next/font/google";
 import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "@/trpc/react";
@@ -10,7 +10,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { HydrateClient } from "@/trpc/server";
 
-const fontSans = FontSans({
+const fontSans = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
@@ -29,26 +29,24 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "h-screen overflow-hidden bg-background bg-origin-padding font-sans antialiased",
-          "before:absolute before:left-1/2 before:top-1/2 before:-z-10 before:h-full before:w-full before:-translate-x-1/2 before:-translate-y-1/2 before:bg-[url('/background.png')] before:bg-cover before:bg-repeat before:opacity-[0.02]",
+          "relative min-h-screen bg-background bg-origin-padding font-sans antialiased",
+          "before:absolute before:inset-0 before:-z-10 before:bg-[url('/background.png')] before:bg-cover before:bg-repeat before:opacity-[0.02]",
           fontSans.variable,
         )}
       >
-        <div className="h-screen overflow-auto">
-          <Analytics />
-          <ClerkProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="dark"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <TRPCReactProvider>
-                <HydrateClient>{children}</HydrateClient>
-              </TRPCReactProvider>
-            </ThemeProvider>
-          </ClerkProvider>
-        </div>
+        <Analytics />
+        <ClerkProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <TRPCReactProvider>
+              <HydrateClient>{children}</HydrateClient>
+            </TRPCReactProvider>
+          </ThemeProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

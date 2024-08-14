@@ -11,14 +11,17 @@ export default function Game(props: GuessesProps) {
   const view = useGameView();
 
   return (
-    <div className="relative flex h-screen flex-col items-center justify-center gap-10">
+    <div className="flex w-full flex-col items-center justify-center">
       <AnimatePresence mode="popLayout">
         {view === "game" && (
           <motion.div
             key={"game"}
-            className="absolute top-0 flex w-max flex-col items-center justify-center gap-10"
+            className="flex w-max flex-col items-center justify-center gap-10"
             exit={{ opacity: 0, x: -100 }}
           >
+            <h1 className="p-2 text-lg font-semibold">
+              Qual o anime de hoje? 😆
+            </h1>
             <PixelatedImage
               src={`https://utfs.io/f/${props.todayAnime.cover}`}
             />
@@ -27,27 +30,41 @@ export default function Game(props: GuessesProps) {
           </motion.div>
         )}
         {view === "result" && (
-          <div className="absolute top-0 pb-32">
+          <>
             <motion.div
               key={"animeInfo"}
               className="flex w-max flex-col items-center justify-center gap-10"
               initial={{ opacity: 0, x: 234 }}
               animate={{ opacity: 1, x: 0 }}
             >
+              <ResultMessage />
               <AnimeInfo anime={props.todayAnime} />
             </motion.div>
             <motion.div
               key={"gameResults"}
-              className="flex flex-col items-center justify-center"
+              className="flex w-full max-w-[735px] flex-col items-center justify-center"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
               <GameResult />
             </motion.div>
-          </div>
+          </>
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+function ResultMessage() {
+  const lifes = useGameLifes();
+  return !!lifes ? (
+    <h1 className="w-full rounded-sm bg-[rgba(38,255,60,0.08)] p-2 text-center text-lg font-semibold">
+      Você conseguiu, parabéns!! 🥳
+    </h1>
+  ) : (
+    <h1 className="w-full rounded-sm bg-[rgba(255,52,52,0.08)] p-2 text-center text-lg font-semibold">
+      Infelizmente não foi dessa vez! 😥
+    </h1>
   );
 }
 

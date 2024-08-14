@@ -15,7 +15,7 @@ export default function GameResult() {
 
   return (
     <>
-      <div className="my-12 grid w-full gap-3 sm:grid-cols-3">
+      <div className="mb-14 mt-12 grid w-full gap-3 sm:grid-cols-3">
         <div className="rounded-sm border border-border/10 bg-white/5 p-3 text-center">
           <div className="mb-2 text-2xl font-bold">{timesPlayed}</div>
           <div className="text-sm text-muted">Jogos</div>

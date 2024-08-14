@@ -17,7 +17,7 @@ export default function TopBar({ children }: TopBarProps) {
   const [open, { toggle }] = useDisclosure(false);
 
   return (
-    <header className="relative top-0 z-10 flex w-full flex-col items-center justify-center gap-3 border-b border-border/5 bg-[rgba(19,18,20,0.50)] py-4 backdrop-blur-2xl sm:sticky sm:h-[4.375rem] sm:py-0">
+    <header className="sticky top-0 z-10 flex h-[4.375rem] w-full flex-col items-center justify-center gap-3 border-b border-border/5 bg-[rgba(19,18,20,0.50)] py-4 backdrop-blur-2xl">
       <div className="flex w-full max-w-[1320px] justify-between gap-3 sm:gap-12">
         <Button className="gap-3 sm:hidden" variant="outline" onClick={toggle}>
           {open ? (

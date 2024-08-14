@@ -95,6 +95,7 @@ const useGameStore = create<State & Actions>()(
 
             state.lifes = 5;
             state.view = "game";
+            location.reload();
           });
         },
       },

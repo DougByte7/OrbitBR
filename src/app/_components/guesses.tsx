@@ -49,8 +49,7 @@ export default function Guesses({ todayAnime, animeList }: GuessesProps) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
           onChange={setGuess}
         />
-
-        <Button disabled={!guess} onClick={handleGuess}>
+        <Button className="relative" disabled={!guess} onClick={handleGuess}>
           <WandSparkles size={20} />
           <span className="hidden sm:inline">Adivinhar</span>
         </Button>
