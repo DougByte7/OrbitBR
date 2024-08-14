@@ -3,7 +3,7 @@ import {
   privateProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
-import { animeSchema } from "@/app/cms/schemas/anime-schema";
+import { animeSchema, coverExtension } from "@/app/cms/schemas/anime-schema";
 import { nanoid } from "@/lib/nanoid";
 import { utapi } from "@/server/uploadthing";
 import { TRPCError } from "@trpc/server";
@@ -66,7 +66,7 @@ export const animeRouter = createTRPCRouter({
         },
       }) => {
         let coverKey = cover;
-        if (!cover.endsWith(".png")) {
+        if (!cover.endsWith(coverExtension)) {
           const currentCover = await ctx.db.anime.findFirstOrThrow({
             where: { id },
           });
@@ -145,7 +145,7 @@ async function uploadAnimeCover(cover: string, id: string) {
     throw new TRPCError({ code: "PAYLOAD_TOO_LARGE" });
 
   const utRes = await utapi.uploadFiles(
-    new File([new Blob([resizedCover])], `${id}.webp`),
+    new File([new Blob([resizedCover])], `${id}${coverExtension}`),
   );
   if (!utRes.data) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
