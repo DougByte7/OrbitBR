@@ -87,7 +87,6 @@ const useGameStore = create<State & Actions>()(
               playedTwoOrMoreDaysAgo;
 
             if (canPlayToday && state.view === "result") {
-              revalidatePath("");
               state.lifes = 5;
               state.view = "game";
             }
