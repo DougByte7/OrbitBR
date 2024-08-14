@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { persist } from "zustand/middleware";
 import { differenceInDays, isYesterday } from "date-fns";
+import { revalidatePath } from "next/cache";
 
 type State = {
   view: "game" | "result";
@@ -82,6 +83,7 @@ const useGameStore = create<State & Actions>()(
               playedTwoOrMoreDaysAgo;
 
             if (canPlayToday && state.view === "result") {
+              revalidatePath("/");
               state.lifes = 5;
               state.view = "game";
             }
