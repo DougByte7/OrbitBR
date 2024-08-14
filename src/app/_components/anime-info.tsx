@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/collapsible";
 import type { Anime } from "@prisma/client";
 import { useDisclosure } from "@mantine/hooks";
+import clsx from "clsx";
 
 interface AnimeInfoProps {
   anime: Anime;
@@ -62,7 +63,12 @@ export default function AnimeInfo({ anime }: AnimeInfoProps) {
             {anime.streamingUrl.map((url) => (
               <a key={url} className="w-fit" href={url} target="_blank">
                 <img
-                  className="h-[27px] rounded-[2px]"
+                  className={clsx(
+                    url.includes("netflix") || url.includes("disneyplus")
+                      ? "h-[34px]"
+                      : "h-[27px]",
+                    "rounded-[2px]",
+                  )}
                   src={`/images/${url.match(/www.(?<streaming>.*).com/)!.groups!.streaming!}.png`}
                   alt={`Logo ${anime.streamingAt}`}
                 />
