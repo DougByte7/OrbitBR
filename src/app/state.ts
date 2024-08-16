@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { persist } from "zustand/middleware";
 import { addDays, isWithinInterval, subDays, subMilliseconds } from "date-fns";
+import { resetTime } from "@/constants/gameResetTime";
 
 type State = {
   view: "game" | "result";
@@ -41,9 +42,9 @@ const useGameStore = create<State & Actions>()(
             const lastPlayed = new Date(state.lastPlayed);
 
             const prevGameTimeStart = subDays(
-              now.getHours() >= 12
-                ? now.setHours(12, 0, 0, 0)
-                : subDays(now, 1).setHours(12, 0, 0, 0),
+              now.getHours() >= resetTime
+                ? now.setHours(resetTime, 0, 0, 0)
+                : subDays(now, 1).setHours(resetTime, 0, 0, 0),
               1,
             );
             const prevGameTimeEnd = subMilliseconds(
@@ -80,9 +81,9 @@ const useGameStore = create<State & Actions>()(
             const lastPlayed = new Date(state.lastPlayed);
 
             const gameTimeStart =
-              now.getHours() >= 12
-                ? now.setHours(12, 0, 0, 0)
-                : subDays(now, 1).setHours(12, 0, 0, 0);
+              now.getHours() >= resetTime
+                ? now.setHours(resetTime, 0, 0, 0)
+                : subDays(now, 1).setHours(resetTime, 0, 0, 0);
             const gameTimeEnd = subMilliseconds(addDays(gameTimeStart, 1), 1);
 
             if (

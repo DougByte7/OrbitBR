@@ -3,15 +3,16 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { addDays } from "date-fns";
 import { useGameActions } from "@/app/state";
+import { resetTime } from "@/constants/gameResetTime";
 
 export const revalidate = 0;
 
 const computeCountdown = () => {
   const now = new Date();
   const nextMidDay =
-    now.getHours() >= 12
-      ? addDays(now, 1).setHours(12, 0, 0, 0)
-      : new Date().setHours(12, 0, 0, 0);
+    now.getHours() >= resetTime
+      ? addDays(now, 1).setHours(resetTime, 0, 0, 0)
+      : new Date().setHours(resetTime, 0, 0, 0);
 
   const diff = nextMidDay - now.getTime();
   const hours = diff / 1000 / 60 / 60;
