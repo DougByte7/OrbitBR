@@ -30,7 +30,7 @@ export default function RootLayout({
       <body
         className={cn(
           "relative min-h-screen bg-background bg-origin-padding font-sans antialiased",
-          "before:absolute before:inset-0 before:-z-10 before:bg-[url('/background.png')] before:bg-cover before:bg-repeat before:opacity-[0.02]",
+          "before:absolute before:inset-0 before:-z-10 before:bg-[url('/background.webp')] before:bg-cover before:bg-repeat before:opacity-[0.02]",
           fontSans.variable,
         )}
       >
