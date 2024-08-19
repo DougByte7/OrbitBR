@@ -25,7 +25,7 @@ export default function AnimeInfo({ anime }: AnimeInfoProps) {
   const hiddenText = anime.synopsis.slice(textSize);
 
   return (
-    <div className="flex flex-col items-center justify-center gap-10 sm:flex-row">
+    <div className="flex flex-col items-top justify-center gap-10 sm:flex-row">
       <div className="relative">
         <Badge
           className="absolute -left-[32px] top-6 before:absolute before:left-[1px] before:top-[calc(100%+1px)] before:h-0 before:w-0 before:border-b-[12px] before:border-l-[26px] before:border-y-transparent before:border-l-success"
