@@ -9,6 +9,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { HydrateClient } from "@/trpc/server";
+import { CSPostHogProvider } from "@/providers/posthog-provider";
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -27,27 +28,29 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body
-        className={cn(
-          "relative min-h-screen bg-background bg-origin-padding font-sans antialiased",
-          "before:absolute before:inset-0 before:-z-10 before:bg-[url('/background.webp')] before:bg-cover before:bg-repeat before:opacity-[0.02]",
-          fontSans.variable,
-        )}
-      >
-        <Analytics />
-        <ClerkProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <TRPCReactProvider>
-              <HydrateClient>{children}</HydrateClient>
-            </TRPCReactProvider>
-          </ThemeProvider>
-        </ClerkProvider>
-      </body>
+      <CSPostHogProvider>
+        <body
+          className={cn(
+            "relative min-h-screen bg-background bg-origin-padding font-sans antialiased",
+            "before:absolute before:inset-0 before:-z-10 before:bg-[url('/background.webp')] before:bg-cover before:bg-repeat before:opacity-[0.02]",
+            fontSans.variable,
+          )}
+        >
+          <Analytics />
+          <ClerkProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <TRPCReactProvider>
+                <HydrateClient>{children}</HydrateClient>
+              </TRPCReactProvider>
+            </ThemeProvider>
+          </ClerkProvider>
+        </body>
+      </CSPostHogProvider>
     </html>
   );
 }
