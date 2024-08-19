@@ -105,7 +105,7 @@ function PixelatedImage({ src }: PixelatedImageProps) {
     newImage.onload = () => {
       ctx.drawImage(newImage, 0, 0, w, h);
       ctx.drawImage(canvas, 0, 0, w, h, 0, 0, width, height);
-      setSrc(canvas.toDataURL("image/jpg"));
+      setSrc(canvas.toDataURL("image/webp"));
       setImage(image);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
