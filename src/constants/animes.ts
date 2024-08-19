@@ -14,6 +14,7 @@ export const genres = [
   "Ficção Científica",
   "Girls Love",
   "Horror",
+  "Mecha",
   "Mistério",
   "Música",
   "Romance",
