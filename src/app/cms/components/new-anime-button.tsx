@@ -14,6 +14,7 @@ export default function NewAnime() {
       title: "Nove anime",
       children: <AnimeForm useSaveMutation={api.anime.create.useMutation} />,
       centered: true,
+      closeOnClickOutside: false,
     });
   return (
     <Button type="button" size="sm" onClick={handleNew}>

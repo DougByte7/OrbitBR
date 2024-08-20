@@ -20,8 +20,24 @@ export const animeSchema = z.object({
   title: z.string().trim().min(2, "O título de ter pelo menos 2 letras."),
   status: z.string().trim().min(1, "O status é necessário."),
   synopsis: z.string().trim().min(1, "A sinopse é necessária."),
-  authors: z.string().array().nonempty("Pelo menos um autor é necessário."),
-  genres: z.string().array().nonempty("Pelo menos um gênero é necessário."),
+  authors: z
+    .string()
+    .trim()
+    .min(1, "O autor é necessário.")
+    .array()
+    .nonempty("Pelo menos um autor é necessário."),
+  genres: z
+    .string()
+    .trim()
+    .min(1, "O gênero é necessário.")
+    .array()
+    .nonempty("Pelo menos um gênero é necessário."),
+  tips: z
+    .string()
+    .trim()
+    .min(1, "A dica é necessária.")
+    .array()
+    .nonempty("Pelo menos ums dica é necessária."),
   streamingUrl: z
     .string()
     .url("URL inválida")

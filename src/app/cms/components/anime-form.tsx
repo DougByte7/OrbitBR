@@ -46,6 +46,7 @@ export default function AnimeForm({
       ],
       genres: (anime?.genres ?? []) as unknown as [string, ...string[]],
       authors: (anime?.authors ?? []) as unknown as [string, ...string[]],
+      tips: (anime?.tips ?? []) as unknown as [string, ...string[]],
     },
     validate: zodResolver(animeSchema),
   });
@@ -87,15 +88,19 @@ export default function AnimeForm({
 
   return (
     <form
-      className="grid grid-cols-[1fr_auto] items-center gap-4"
+      className="grid grid-cols-3 items-center gap-4"
       onSubmit={form.onSubmit(handleSave)}
     >
       <TextInput
-        className="col-span-2"
+        className="col-span-3"
         label="Titulo"
         {...form.getInputProps("title")}
       />
-      <Radio.Group label="Status" {...form.getInputProps("status")}>
+      <Radio.Group
+        className="col-span-2"
+        label="Status"
+        {...form.getInputProps("status")}
+      >
         <Group align="center">
           {status.map((op) => (
             <Radio key={op.value} label={op.label} value={op.value} />
@@ -103,9 +108,9 @@ export default function AnimeForm({
         </Group>
       </Radio.Group>
 
-      <TagsInput className="w-72" label="Autores" {...form.getInputProps("authors")} />
+      <TagsInput label="Autores" {...form.getInputProps("authors")} />
       <Textarea
-        className="col-span-2"
+        className="col-span-3"
         autosize
         label="Sinopse"
         {...form.getInputProps("synopsis")}
@@ -116,23 +121,25 @@ export default function AnimeForm({
         data={genres}
         {...form.getInputProps("genres")}
       />
+      <TagsInput label="Dicas" {...form.getInputProps("tips")} />
 
       <TagsInput
-        className="col-span-2"
-        label="Streaming Urls"
+        className="col-span-3"
+        label="Urls dos streaming"
         type="url"
         {...form.getInputProps("streamingUrl")}
       />
 
       <FileInput
-        className="col-span-2"
+        className="col-span-3"
         label="Capa"
+        description={ACCEPTED_IMAGE_TYPES.join()}
         placeholder="Selecione um arquivo"
         accept={ACCEPTED_IMAGE_TYPES.join()}
         {...form.getInputProps("cover")}
       />
 
-      <Button disabled={isPending} className="col-span-2">
+      <Button disabled={isPending} className="col-span-3">
         {isPending ? (
           <Loader color="white" />
         ) : (

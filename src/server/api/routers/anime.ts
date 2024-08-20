@@ -29,6 +29,7 @@ export const animeRouter = createTRPCRouter({
           authors,
           genres,
           streamingUrl,
+          tips,
         },
       }) => {
         const id = nanoid(idSize);
@@ -41,10 +42,11 @@ export const animeRouter = createTRPCRouter({
             status: status.trim(),
             title: title.trim(),
             synopsis: synopsis.trim(),
-            authors,
-            genres,
             streamingAt: getStreamingNames(streamingUrl),
-            streamingUrl,
+            authors: authors.map((data) => data.trim()),
+            genres: genres.map((data) => data.trim()),
+            streamingUrl: streamingUrl.map((data) => data.trim()),
+            tips: tips.map((data) => data.trim()),
           },
         });
       },
@@ -62,6 +64,7 @@ export const animeRouter = createTRPCRouter({
           synopsis,
           authors,
           genres,
+          tips,
           streamingUrl,
         },
       }) => {
@@ -83,10 +86,11 @@ export const animeRouter = createTRPCRouter({
             status: status.trim(),
             title: title.trim(),
             synopsis: synopsis.trim(),
-            authors,
-            genres,
-            streamingUrl,
             streamingAt: getStreamingNames(streamingUrl),
+            authors: authors.map((data) => data.trim()),
+            genres: genres.map((data) => data.trim()),
+            streamingUrl: streamingUrl.map((data) => data.trim()),
+            tips: tips.map((data) => data.trim()),
           },
         });
       },

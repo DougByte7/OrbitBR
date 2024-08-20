@@ -137,6 +137,7 @@ function CardAnime({ anime }: WithAnimeProp) {
         />
       ),
       centered: true,
+      closeOnClickOutside: false,
     });
 
   return (
