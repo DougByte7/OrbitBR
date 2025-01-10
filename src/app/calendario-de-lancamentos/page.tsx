@@ -9,10 +9,10 @@ import { Fragment, Suspense } from "react";
 
 export default function Page() {
   return (
-    <main className="grid items-center justify-items-center gap-10 px-4 pb-32">
+    <main className="flex flex-col items-center justify-center gap-10 px-4 pb-32">
       <TopBar />
 
-      <div className="flex items-center gap-2 justify-self-start">
+      <div className="flex items-center gap-2">
         <Calendar />
         <h1 className="text-3xl font-bold">Calendário de Lançamentos</h1>
       </div>
@@ -62,14 +62,12 @@ async function WeeklyCalendar() {
 
   const animesByWeek = animes.reduce(
     (acc, anime) => {
-      const dayOfWeek = new Date(anime.aired.from).toLocaleDateString(
-        undefined,
-        { weekday: "long" },
-      );
+      const dayOfWeek = new Date(anime.aired.from).toLocaleDateString("pt-BR", {
+        weekday: "long",
+      });
 
       const dayOfWeekIndex = weekDays.findIndex(
-        (d) =>
-          d.toLocaleDateString(undefined, { weekday: "long" }) === dayOfWeek,
+        (d) => d.toLocaleDateString("pt-BR", { weekday: "long" }) === dayOfWeek,
       );
 
       if (acc[dayOfWeekIndex]) {
@@ -84,16 +82,16 @@ async function WeeklyCalendar() {
   );
 
   return (
-    <div className="grid w-full max-w-[1920px] grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))] items-baseline gap-4">
+    <div className="grid w-full grid-cols-[repeat(auto-fit,_minmax(150px,_250px))] items-baseline justify-center gap-4">
       {weekDays.map((day, i) => (
         <div key={i}>
           <div className="rounded-t-sm bg-primary px-1 text-center text-lg uppercase">
             {day
-              .toLocaleDateString('pt-BR', { weekday: "long" })
+              .toLocaleDateString("pt-BR", { weekday: "long" })
               .replace("-feira", "")}
           </div>
 
-          <div className="grid justify-items-center gap-2 rounded-b-sm border border-border/10 bg-white/5 p-3 text-center">
+          <div className="grid w-full justify-items-center gap-2 rounded-b-sm border border-border/10 bg-white/5 p-3 text-center">
             <Suspense fallback={<Spinner />}>
               {animesByWeek[i]?.map((anime, j) => (
                 <Fragment key={anime.mal_id}>
