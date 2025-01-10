@@ -5,7 +5,7 @@ import TopBar from "@/components/top-bar";
 import clsx from "clsx";
 import { addDays } from "date-fns";
 import { Calendar } from "lucide-react";
-import { Fragment, Key, Suspense } from "react";
+import { Fragment, Suspense } from "react";
 
 export default function Page() {
   return (
