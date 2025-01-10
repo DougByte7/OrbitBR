@@ -9,6 +9,8 @@ import {
 } from "@remixicon/react";
 import type { ReactNode } from "react";
 import { useDisclosure } from "@mantine/hooks";
+import { Calendar, House } from "lucide-react";
+import Link from "next/link";
 
 interface TopBarProps {
   children?: ReactNode;
@@ -46,6 +48,18 @@ export default function TopBar({ children }: TopBarProps) {
 function MenuButtons() {
   return (
     <>
+      <Button className="w-min" variant="outline" asChild>
+        <Link href="/">
+          <House size={20} color="#C9C6DD" /> Início
+        </Link>
+      </Button>
+
+      <Button className="w-min" variant="outline" asChild>
+        <Link href="/calendario-de-lancamentos">
+          <Calendar size={20} color="#C9C6DD" /> Calendário de Lançamentos
+        </Link>
+      </Button>
+
       <Button className="w-min" variant="outline" asChild>
         <a href="https://discord.gg/HbBFEj5PJ6" target="_blank">
           <RiDiscordFill size={20} color="#C9C6DD" /> Discord
