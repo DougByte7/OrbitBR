@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import TopBar from "@/components/top-bar";
 import clsx from "clsx";
 import { addDays } from "date-fns";
 import { Calendar } from "lucide-react";
-import { Fragment, Suspense } from "react";
+import { Fragment, Key, Suspense } from "react";
 
 export default function Page() {
   return (
@@ -105,30 +108,32 @@ async function WeeklyCalendar() {
                   />
                   <p className="text-center">{anime.title_english}</p>
                   <div className="flex flex-wrap gap-2">
-                    {anime.streaming?.map((streaming) => {
-                      return streaming ? (
-                        <a
-                          key={streaming.url}
-                          className="w-fit"
-                          href={streaming.url}
-                          target="_blank"
-                        >
-                          <img
-                            className={clsx(
-                              streaming.url.includes("netflix") ||
-                                streaming.url.includes("disneyplus")
-                                ? "h-[34px]"
-                                : "h-[27px]",
-                              "rounded-[2px]",
-                            )}
-                            src={`/images/${streaming.url.match(/www.(?<streaming>.*).com/)?.groups?.streaming!}.png`}
-                            alt={`Logo ${streaming.name}`}
-                          />
-                        </a>
-                      ) : (
-                        false
-                      );
-                    })}
+                    {(anime as any).streaming?.map(
+                      (streaming: { url: string; name: string } | null) => {
+                        return streaming ? (
+                          <a
+                            key={streaming.url}
+                            className="w-fit"
+                            href={streaming.url}
+                            target="_blank"
+                          >
+                            <img
+                              className={clsx(
+                                streaming.url.includes("netflix") ||
+                                  streaming.url.includes("disneyplus")
+                                  ? "h-[34px]"
+                                  : "h-[27px]",
+                                "rounded-[2px]",
+                              )}
+                              src={`/images/${streaming.url.match(/www.(?<streaming>.*).com/)?.groups?.streaming}.png`}
+                              alt={`Logo ${streaming.name}`}
+                            />
+                          </a>
+                        ) : (
+                          false
+                        );
+                      },
+                    )}
                   </div>
                 </Fragment>
               ))}
