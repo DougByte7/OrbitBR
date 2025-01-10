@@ -95,7 +95,7 @@ async function WeeklyCalendar() {
 
           <div className="grid justify-items-center gap-2 rounded-b-sm border border-border/10 bg-white/5 p-3 text-center">
             <Suspense fallback={<Spinner />}>
-              {animesByWeek[i].map((anime, j) => (
+              {animesByWeek[i]?.map((anime, j) => (
                 <Fragment key={anime.mal_id}>
                   {j !== 0 && (
                     <div className="h-2 w-full border-t border-border/10" />
