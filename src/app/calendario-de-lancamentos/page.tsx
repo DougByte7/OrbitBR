@@ -89,7 +89,7 @@ async function WeeklyCalendar() {
         <div key={i}>
           <div className="rounded-t-sm bg-primary px-1 text-center text-lg uppercase">
             {day
-              .toLocaleDateString(undefined, { weekday: "long" })
+              .toLocaleDateString('pt-BR', { weekday: "long" })
               .replace("-feira", "")}
           </div>
 
