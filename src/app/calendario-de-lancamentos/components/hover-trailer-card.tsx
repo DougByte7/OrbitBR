@@ -74,7 +74,7 @@ export default function HoverTrailerCard({ anime }: HoverTrailerCardProps) {
         <div
           className={clsx(
             isMobile ? "grid max-w-[300px]" : "grid max-w-[560px]",
-            'text-start" grid gap-4',
+            "grid gap-4 text-start",
           )}
         >
           <iframe
