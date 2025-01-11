@@ -13,7 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { genreMap } from "@/constants/animes";
+import { genreMap, themeMap } from "@/constants/animes";
 import clsx from "clsx";
 import type { JikanAnime } from "../interfaces";
 import { Badge } from "@/components/ui/badge";
@@ -89,7 +89,14 @@ export default function HoverTrailerCard({ anime }: HoverTrailerCardProps) {
           />
           <div className="flex gap-3">
             {anime.genres?.map((genre) => (
-              <Badge key={genre.name}>{genreMap.get(genre.name)}</Badge>
+              <Badge key={genre.name}>
+                {genreMap.get(genre.name) ?? genre.name}
+              </Badge>
+            ))}
+            {anime.themes?.map((genre) => (
+              <Badge key={genre.name}>
+                {themeMap.get(genre.name) ?? genre.name}
+              </Badge>
             ))}
           </div>
 

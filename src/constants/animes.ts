@@ -87,7 +87,7 @@ export const genreMap = new Map([
   ["Slice of Life", "Vida Cotidiana"],
 ]);
 
-const themeMap = new Map([
+export const themeMap = new Map([
   ["Adult Cast", "Elenco Adulto"],
   ["Martial Arts", "Artes Marciais"],
   ["Anthropomorphic", "Antropomórfico"],
