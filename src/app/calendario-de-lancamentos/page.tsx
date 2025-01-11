@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import TopBar from "@/components/top-bar";
-import clsx from "clsx";
 import { addDays } from "date-fns";
 import { Calendar } from "lucide-react";
 import { Fragment, Suspense } from "react";
+import type { JikanAnimeGetSeasonNowResponse } from "./interfaces";
+import HoverTrailerCard from "./components/hover-trailer-card";
 
 export default function Page() {
   return (
@@ -28,22 +26,23 @@ async function WeeklyCalendar() {
     .map((_, i) => addDays(today, i));
 
   const res = await fetch("https://api.jikan.moe/v4/seasons/now?filter=tv");
-  const { data } = (await res.json()) as AnimeJikan;
-  const streamingsPromises = data.map(async (anime) => {
-    const res = await fetch(
-      `https://api.jikan.moe/v4/anime/${anime.mal_id}/streaming`,
-    );
+  const { data } = (await res.json()) as JikanAnimeGetSeasonNowResponse;
+  const streamingsPromises =
+    data?.map(async (anime) => {
+      const res = await fetch(
+        `https://api.jikan.moe/v4/anime/${anime.mal_id}/streaming`,
+      );
 
-    const { data } = (await res.json()) as {
-      data: { name: string; url: string }[];
-    };
+      const { data } = (await res.json()) as {
+        data: { name: string; url: string }[];
+      };
 
-    return data;
-  });
+      return data;
+    }) ?? [];
 
   const streamings = await Promise.allSettled(streamingsPromises);
 
-  const animes = data.map((anime, i) => {
+  const animes = data?.map((anime, i) => {
     const streaming =
       streamings[i]?.status === "fulfilled"
         ? streamings[i].value?.filter(({ name }) =>
@@ -60,26 +59,31 @@ async function WeeklyCalendar() {
 
   //console.log(animes[0]);
 
-  const animesByWeek = animes.reduce(
-    (acc, anime) => {
-      const dayOfWeek = new Date(anime.aired.from).toLocaleDateString("pt-BR", {
-        weekday: "long",
-      });
+  const animesByWeek =
+    animes?.reduce(
+      (acc, anime) => {
+        const dayOfWeek = new Date(anime.aired.from).toLocaleDateString(
+          "pt-BR",
+          {
+            weekday: "long",
+          },
+        );
 
-      const dayOfWeekIndex = weekDays.findIndex(
-        (d) => d.toLocaleDateString("pt-BR", { weekday: "long" }) === dayOfWeek,
-      );
+        const dayOfWeekIndex = weekDays.findIndex(
+          (d) =>
+            d.toLocaleDateString("pt-BR", { weekday: "long" }) === dayOfWeek,
+        );
 
-      if (acc[dayOfWeekIndex]) {
-        acc[dayOfWeekIndex].push(anime);
-      } else {
-        acc[dayOfWeekIndex] = [anime];
-      }
+        if (acc[dayOfWeekIndex]) {
+          acc[dayOfWeekIndex].push(anime);
+        } else {
+          acc[dayOfWeekIndex] = [anime];
+        }
 
-      return acc;
-    },
-    [] as Array<AnimeJikan["data"]>,
-  );
+        return acc;
+      },
+      [] as Array<JikanAnimeGetSeasonNowResponse["data"]>,
+    ) ?? [];
 
   return (
     <div className="grid w-full grid-cols-[repeat(auto-fit,_minmax(150px,_250px))] items-baseline justify-center gap-4">
@@ -98,41 +102,7 @@ async function WeeklyCalendar() {
                   {j !== 0 && (
                     <div className="h-2 w-full border-t border-border/10" />
                   )}
-                  <img
-                    src={`${anime.images.webp.large_image_url}`}
-                    width={100}
-                    height={100}
-                    alt={anime.title_english}
-                  />
-                  <p className="text-center">{anime.title_english}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {(anime as any).streaming?.map(
-                      (streaming: { url: string; name: string } | null) => {
-                        return streaming ? (
-                          <a
-                            key={streaming.url}
-                            className="w-fit"
-                            href={streaming.url}
-                            target="_blank"
-                          >
-                            <img
-                              className={clsx(
-                                streaming.url.includes("netflix") ||
-                                  streaming.url.includes("disneyplus")
-                                  ? "h-[34px]"
-                                  : "h-[27px]",
-                                "rounded-[2px]",
-                              )}
-                              src={`/images/${streaming.url.match(/www.(?<streaming>.*).com/)?.groups?.streaming}.png`}
-                              alt={`Logo ${streaming.name}`}
-                            />
-                          </a>
-                        ) : (
-                          false
-                        );
-                      },
-                    )}
-                  </div>
+                  <HoverTrailerCard anime={anime} />
                 </Fragment>
               ))}
             </Suspense>
@@ -166,147 +136,3 @@ function Spinner() {
     </div>
   );
 }
-
-const animeJikan = {
-  data: [
-    {
-      mal_id: 0,
-      url: "string",
-      images: {
-        jpg: {
-          image_url: "string",
-          small_image_url: "string",
-          large_image_url: "string",
-        },
-        webp: {
-          image_url: "string",
-          small_image_url: "string",
-          large_image_url: "string",
-        },
-      },
-      trailer: {
-        youtube_id: "string",
-        url: "string",
-        embed_url: "string",
-      },
-      approved: true,
-      titles: [
-        {
-          type: "string",
-          title: "string",
-        },
-      ],
-      title: "string",
-      title_english: "string",
-      title_japanese: "string",
-      title_synonyms: ["string"],
-      type: "TV",
-      source: "string",
-      episodes: 0,
-      status: "Finished Airing",
-      airing: true,
-      aired: {
-        from: "string",
-        to: "string",
-        prop: {
-          from: {
-            day: 0,
-            month: 0,
-            year: 0,
-          },
-          to: {
-            day: 0,
-            month: 0,
-            year: 0,
-          },
-          string: "string",
-        },
-      },
-      duration: "string",
-      rating: "G - All Ages",
-      score: 0,
-      scored_by: 0,
-      rank: 0,
-      popularity: 0,
-      members: 0,
-      favorites: 0,
-      synopsis: "string",
-      background: "string",
-      season: "summer",
-      year: 0,
-      broadcast: {
-        day: "string",
-        time: "string",
-        timezone: "string",
-        string: "string",
-      },
-      producers: [
-        {
-          mal_id: 0,
-          type: "string",
-          name: "string",
-          url: "string",
-        },
-      ],
-      licensors: [
-        {
-          mal_id: 0,
-          type: "string",
-          name: "string",
-          url: "string",
-        },
-      ],
-      studios: [
-        {
-          mal_id: 0,
-          type: "string",
-          name: "string",
-          url: "string",
-        },
-      ],
-      genres: [
-        {
-          mal_id: 0,
-          type: "string",
-          name: "string",
-          url: "string",
-        },
-      ],
-      explicit_genres: [
-        {
-          mal_id: 0,
-          type: "string",
-          name: "string",
-          url: "string",
-        },
-      ],
-      themes: [
-        {
-          mal_id: 0,
-          type: "string",
-          name: "string",
-          url: "string",
-        },
-      ],
-      demographics: [
-        {
-          mal_id: 0,
-          type: "string",
-          name: "string",
-          url: "string",
-        },
-      ],
-    },
-  ],
-  pagination: {
-    last_visible_page: 0,
-    has_next_page: true,
-    items: {
-      count: 0,
-      total: 0,
-      per_page: 0,
-    },
-  },
-};
-
-type AnimeJikan = typeof animeJikan;
