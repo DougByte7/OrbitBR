@@ -4,6 +4,7 @@ import { Calendar } from "lucide-react";
 import { Fragment, Suspense } from "react";
 import type { JikanAnimeGetSeasonNowResponse } from "./interfaces";
 import HoverTrailerCard from "./components/hover-trailer-card";
+import Highlight from "./components/highlight";
 
 export default function Page() {
   return (
@@ -23,7 +24,8 @@ async function WeeklyCalendar() {
   const today = new Date();
   const weekDays = Array(7)
     .fill(today)
-    .map((_, i) => addDays(today, i));
+    .map((_, i) => addDays(today, i))
+    .sort((a, b) => a.getDay() - b.getDay());
 
   const res = await fetch("https://api.jikan.moe/v4/seasons/now?filter=tv");
   const { data } = (await res.json()) as JikanAnimeGetSeasonNowResponse;
@@ -57,8 +59,6 @@ async function WeeklyCalendar() {
     };
   });
 
-  //console.log(animes[0]);
-
   const animesByWeek =
     animes?.reduce(
       (acc, anime) => {
@@ -88,8 +88,9 @@ async function WeeklyCalendar() {
   return (
     <div className="grid w-full grid-cols-[repeat(auto-fit,_minmax(150px,_250px))] items-baseline justify-center gap-4">
       {weekDays.map((day, i) => (
-        <div key={i}>
-          <div className="rounded-t-sm bg-primary px-1 text-center text-lg uppercase">
+        <div key={i} className="relative">
+          {i === today.getDay() && <Highlight />}
+          <div className="relative -z-20 rounded-t-sm border-[2px] border-transparent bg-primary px-1 text-center text-lg uppercase">
             {day
               .toLocaleDateString("pt-BR", { weekday: "long" })
               .replace("-feira", "")}
