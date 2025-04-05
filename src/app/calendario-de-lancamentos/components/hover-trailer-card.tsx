@@ -87,7 +87,7 @@ export default function HoverTrailerCard({ anime }: HoverTrailerCardProps) {
             referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
           />
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             {anime.genres?.map((genre) => (
               <Badge key={genre.name}>
                 {genreMap.get(genre.name) ?? genre.name}
