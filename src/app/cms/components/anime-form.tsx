@@ -76,10 +76,9 @@ export default function AnimeForm({
     reader.onload = (e: ProgressEvent<FileReader>) => {
       const cover = (e.target?.result as string) ?? "";
       if (anime) {
-        // @ts-expect-error this mutation may be Create Or Update, Update NEED the ID
         mutate({ ...values, cover, id: anime.id });
       } else {
-        // @ts-expect-error this mutation may be Create Or Update, Update NEED the ID
+        // @ts-expect-error create mutation doesn't require id, but TS sees the union intersection
         mutate({ ...values, cover });
       }
     };

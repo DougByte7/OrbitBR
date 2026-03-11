@@ -20,10 +20,10 @@ import { FilterIcon } from "lucide-react";
 export default async function CMS({
   searchParams,
 }: {
-  params: { slug: string };
-  searchParams: Record<string, string | undefined>;
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<Record<string, string | undefined>>;
 }) {
-  const user = await currentUser();
+  const [user, params] = await Promise.all([currentUser(), searchParams]);
 
   return (
     <main>
@@ -38,7 +38,7 @@ export default async function CMS({
 
       {user?.privateMetadata.admin === true ? (
         <div className="grid gap-4 pt-6">
-          <AnimeFilters params={searchParams} />
+          <AnimeFilters params={params} />
           <AnimeList />
         </div>
       ) : (

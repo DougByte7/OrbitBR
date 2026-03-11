@@ -66,13 +66,14 @@ function getCurrentSeason(): { season: string; seasonYear: number } {
 export default async function Page({
   searchParams,
 }: {
-  searchParams: Record<string, string | undefined>;
+  searchParams: Promise<Record<string, string | undefined>>;
 }) {
   const { season: defaultSeason, seasonYear: defaultYear } = getCurrentSeason();
+  const params = await searchParams;
 
-  const rawSeason = (searchParams.season ?? "").toUpperCase();
+  const rawSeason = (params.season ?? "").toUpperCase();
   const season = VALID_SEASONS.has(rawSeason) ? rawSeason : defaultSeason;
-  const seasonYear = Number(searchParams.year) || defaultYear;
+  const seasonYear = Number(params.year) || defaultYear;
 
   return (
     <main className="flex flex-col items-center justify-center gap-10 px-4 pb-32">

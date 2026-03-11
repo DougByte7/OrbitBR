@@ -149,7 +149,7 @@ async function uploadAnimeCover(cover: string, id: string) {
     throw new TRPCError({ code: "PAYLOAD_TOO_LARGE" });
 
   const utRes = await utapi.uploadFiles(
-    new File([new Blob([resizedCover])], `${id}${coverExtension}`),
+    new File([new Blob([new Uint8Array(resizedCover)])], `${id}${coverExtension}`),
   );
   if (!utRes.data) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 

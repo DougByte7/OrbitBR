@@ -82,7 +82,7 @@ function List({ animes }: ListProps) {
               <div
                 key={virtualItem.key}
                 data-index={virtualItem.index}
-                ref={virtualItem.measureElement}
+                ref={rowVirtualizer.measureElement}
               >
                 <div className="mx-auto mb-6 grid max-w-[1200px] grid-cols-5 justify-center gap-6">
                   {animes
