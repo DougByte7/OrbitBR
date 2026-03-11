@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Highlight from "./highlight";
 
 const SEASONS = ["WINTER", "SPRING", "SUMMER", "FALL"] as const;
 const SEASON_LABELS: Record<string, string> = {
@@ -53,16 +54,21 @@ export default function SeasonYearControls() {
   return (
     <div className="flex flex-col items-center gap-3">
       <div className="flex gap-1">
-        {SEASONS.map((season) => (
-          <Button
-            key={season}
-            size="sm"
-            variant={activeSeason === season ? "default" : "outline"}
-            onClick={() => updateParams({ season })}
-          >
-            {SEASON_LABELS[season]}
-          </Button>
-        ))}
+        {SEASONS.map((season) => {
+          const isCurrent = season === defaults.season && activeYear === defaults.year;
+          return (
+            <div key={season} className="relative">
+              {isCurrent && activeSeason !== season && <Highlight />}
+              <Button
+                size="sm"
+                variant={activeSeason === season ? "default" : "outline"}
+                onClick={() => updateParams({ season })}
+              >
+                {SEASON_LABELS[season]}
+              </Button>
+            </div>
+          );
+        })}
       </div>
 
       <div className="flex items-center gap-2">

@@ -30,4 +30,9 @@ export interface AniListMedia {
     site: string;
     url: string;
   }[];
+  relations: {
+    edges: {
+      relationType: string;
+    }[];
+  };
 }

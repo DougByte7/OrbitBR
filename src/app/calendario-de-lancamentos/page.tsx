@@ -4,6 +4,7 @@ import { Calendar } from "lucide-react";
 import { Suspense } from "react";
 import type { AniListPageResponse } from "./interfaces";
 import GenreFilter from "./components/genre-filter";
+import ContinuationFilter from "./components/continuation-filter";
 import SeasonYearControls from "./components/season-year-controls";
 import CalendarGrid from "./components/calendar-grid";
 import type { WeekDay } from "./components/calendar-grid";
@@ -45,6 +46,11 @@ const SEASON_QUERY = gql`
         streamingEpisodes {
           site
           url
+        }
+        relations {
+          edges {
+            relationType
+          }
         }
       }
     }
@@ -132,6 +138,7 @@ async function WeeklyCalendar({
     <>
       <div className="flex w-full flex-wrap items-start justify-center gap-8">
         <SeasonYearControls />
+        <ContinuationFilter />
         <GenreFilter allGenres={allGenres} />
       </div>
       <CalendarGrid animes={animes} weekDays={weekDays} />

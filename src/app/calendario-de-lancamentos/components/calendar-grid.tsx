@@ -41,8 +41,17 @@ export default function CalendarGrid({ animes, weekDays }: CalendarGridProps) {
     .filter(Boolean);
   const genreMode = searchParams.get("genreMode") ?? "or";
   const genreAction = searchParams.get("genreAction") ?? "show";
+  const continuationFilter = searchParams.get("continuation") ?? "all";
 
   function isVisible(anime: AniListMedia): boolean {
+    if (continuationFilter !== "all") {
+      const hasPrequel = anime.relations.edges.some(
+        (e) => e.relationType === "PREQUEL",
+      );
+      if (continuationFilter === "new" && hasPrequel) return false;
+      if (continuationFilter === "continuation" && !hasPrequel) return false;
+    }
+
     if (selectedGenres.length === 0) return true;
     const match =
       genreMode === "and"
