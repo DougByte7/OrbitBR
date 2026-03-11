@@ -1,5 +1,5 @@
 import React from "react";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { SignInButton, UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import AnimeList from "./components/anime-list";
 import NewAnime from "./components/new-anime-button";
@@ -28,12 +28,7 @@ export default async function CMS({
   return (
     <main>
       <TopBar>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-        <SignedOut>
-          <SignInButton>Entrar</SignInButton>
-        </SignedOut>
+        {user ? <UserButton /> : <SignInButton>Entrar</SignInButton>}
       </TopBar>
 
       {user?.privateMetadata.admin === true ? (
