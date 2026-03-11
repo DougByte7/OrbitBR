@@ -57,7 +57,7 @@ export default function GenreFilter({ allGenres }: GenreFilterProps) {
 
       <div
         className={cn(
-          "flex gap-4 transition-opacity",
+          "flex flex-wrap gap-4 transition-opacity",
           !hasSelection && "pointer-events-none opacity-40",
         )}
       >
